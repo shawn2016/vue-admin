@@ -31,19 +31,28 @@
     </Form>
   </div>
   <div class="vue-panel">
-    <Table :loading="loading" :data="tableData1" :columns="tableColumns1" stripe></Table>
+    <Table :loading="tableLoading" :data="tableData1" :columns="tableColumns1" stripe></Table>
     <div style="margin: 10px;overflow: hidden">
         <div style="float: right;">
             <Page :total="100" :current="1" @on-change="changePage"></Page>
         </div>
     </div>
       </div>
+        <!-- 对话框 -->
+      
+  <Modal
+        v-model="modal6"
+        :title="modalTitle"
+        :loading="modalLoading"
+        @on-ok="asyncOK">
+        <p>{{modalContent}}</p>
+    </Modal>
     </i-layout>
 </template>
 <script>
 import iLayout from "../../components/layout.vue";
 import iBreadcrumb from "../../components/breadcrumb.vue";
-import formatDate from "../../filters/date";
+import filters from "../../filters";
 export default {
   name: "userlist",
   components: {
@@ -53,12 +62,18 @@ export default {
   filters: {
     formatDate(time) {
       let date = new Date(time);
-      return formatDate(date, "yyyy-MM-dd hh:mm");
+      return filters.formatDate(date, "yyyy-MM-dd hh:mm");
     }
   },
   data() {
     return {
-      loading: false,
+      tableLoading: false,
+      modal6: false,
+      // 对话框
+      modalLoading: true,
+      modalContent: "",
+      modalTitle: "",
+      modalType: "",
       formItem: {
         input: "",
         select: "",
@@ -73,14 +88,20 @@ export default {
       tableData1: [],
       tableColumns1: [
         {
+          title: "序号",
+          type: "index",
+          width: 60,
+          align: "center"
+        },
+        {
           title: "创建日期",
           key: "createTime",
           render: (h, params) => {
             const row = params.row;
             const time = row.createTime
-              ? formatDate(row.createTime)
+              ? filters.formatDate(row.createTime, "yyyy-MM-dd hh:mm")
               : "";
-            return h();
+            return h("span", time);
           }
         },
         {
@@ -90,127 +111,30 @@ export default {
         {
           title: "用户姓名",
           key: "userName"
-          //   render: (h, params) => {
-          //     const row = params.row;
-          //     const color =
-          //       row.status === 1 ? "blue" : row.status === 2 ? "green" : "red";
-          //     const text =
-          //       row.status === 1
-          //         ? "Working"
-          //         : row.status === 2 ? "Success" : "Fail";
-
-          //     return h(
-          //       "Tag",
-          //       {
-          //         props: {
-          //           type: "dot",
-          //           color: color
-          //         }
-          //       },
-          //       text
-          //     );
-          //   }
         },
         {
           title: "手机号码",
           key: "phonenum"
-          //   render: (h, params) => {
-          //     return h(
-          //       "Poptip",
-          //       {
-          //         props: {
-          //           trigger: "hover",
-          //           title: params.row.portrayal.length + "portrayals",
-          //           placement: "bottom"
-          //         }
-          //       },
-          //       [
-          //         h("Tag", params.row.portrayal.length),
-          //         h(
-          //           "div",
-          //           {
-          //             slot: "content"
-          //           },
-          //           [
-          //             h(
-          //               "ul",
-          //               this.tableData1[params.index].portrayal.map(item => {
-          //                 return h(
-          //                   "li",
-          //                   {
-          //                     style: {
-          //                       textAlign: "center",
-          //                       padding: "4px"
-          //                     }
-          //                   },
-          //                   item
-          //                 );
-          //               })
-          //             )
-          //           ]
-          //         )
-          //       ]
-          //     );
-          //   }
         },
         {
           title: "身份证号码",
+          width: 200,
           key: "identifyNo"
-          //   render: (h, params) => {
-          //     return h(
-          //       "Poptip",
-          //       {
-          //         props: {
-          //           trigger: "hover",
-          //           title: params.row.people.length + "customers",
-          //           placement: "bottom"
-          //         }
-          //       },
-          //       [
-          //         h("Tag", params.row.people.length),
-          //         h(
-          //           "div",
-          //           {
-          //             slot: "content"
-          //           },
-          //           [
-          //             h(
-          //               "ul",
-          //               this.tableData1[params.index].people.map(item => {
-          //                 return h(
-          //                   "li",
-          //                   {
-          //                     style: {
-          //                       textAlign: "center",
-          //                       padding: "4px"
-          //                     }
-          //                   },
-          //                   item.n + "：" + item.c + "People"
-          //                 );
-          //               })
-          //             )
-          //           ]
-          //         )
-          //       ]
-          //     );
-          //   }
         },
         {
           title: "职务",
           key: "userDuty"
-          //   render: (h, params) => {
-          //     return h("div", "Almost" + params.row.time + "days");
-          //   }
         },
         {
           title: "用户类型",
-          key: "refUserRoleCode"
-          //   render: (h, params) => {
-          //     return h(
-          //       "div",
-          //       this.formatDate(this.tableData1[params.index].update)
-          //     );
-          //   }
+          key: "refUserRoleCode",
+          render: (h, params) => {
+            const row = params.row;
+            const refUserRoleCode = row.refUserRoleCode
+              ? filters.refUserRoleCode(row.refUserRoleCode)
+              : row.refUserRoleCode;
+            return h("span", refUserRoleCode);
+          }
         },
         {
           title: "用户状态",
@@ -218,32 +142,102 @@ export default {
         },
         {
           title: "操作",
-          key: "edit"
-          //   render: (h, params) => {
-          //     return h(
-          //       "div",
-          //       this.formatDate(this.tableData1[params.index].update)
-          //     );
-          //   }
+          key: "edit",
+          render: (h, params) => {
+            console.log(params);
+            return h("div", [
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "primary",
+                    size: "small"
+                  },
+                  style: {
+                    marginRight: "5px"
+                  },
+                  on: {
+                    click: () => {
+                      this.openModal({
+                        modalType: "edit",
+                        modalTitle: "提示",
+                        modalContent: "此操作将永久删除该文件, 是否继续?"
+                      });
+                    }
+                  }
+                },
+                "修改"
+              ),
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "error",
+                    size: "small"
+                  },
+                  on: {
+                    click: () => {
+                      this.openModal({
+                        id: params.row.id,
+                        modalType: "delete",
+                        modalTitle: "提示",
+                        modalContent: "此操作将永久删除该文件, 是否继续?"
+                      });
+                    }
+                  }
+                },
+                "删除"
+              )
+            ]);
+          }
         }
       ]
     };
   },
   methods: {
+    // 获取表格数据
     async getList() {
+      this.tableLoading = true;
       const res = await this.$fetch({
         url: "/user/list",
         method: "get",
         data: {}
       });
-      console.log(this.$router);
+      this.tableLoading = false;
       if (res && res.respCode === "000000") {
         if (res.body && res.body.values) {
           this.tableData1 = res.body.values;
         }
       }
     },
-    changePage() {}
+    // 删除用户
+    async deleteUser(id) {
+      const res = await this.$fetch({
+        url: `/user/list/${id}`,
+        method: "delete",
+        data: {}
+      });
+      this.modalLoading = false;
+      this.$Message.success("删除成功");
+      console.log(res);
+    },
+    // 分页
+    changePage() {},
+    // 打开对话框
+    openModal(obj) {
+      this.modal6 = true;
+      this.modalTitle = obj.modalTitle;
+      this.modalContent = obj.modalContent;
+      this.modalType = obj.modalType;
+      this.modalId = obj.modalType;
+    },
+    //对话框 is-ok
+    asyncOK() {
+      this.modalLoading = true;
+      if (this.modalType === "delete") {
+        this.deleteUser(this.modalId);
+      }
+    }
   },
   created() {
     this.getList();

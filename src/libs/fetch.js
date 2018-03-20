@@ -6,7 +6,7 @@ axios.defaults.baseURL = process.env.BASE_API || baseURL;
 axios.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 axios.interceptors.request.use(config => {
   // loading
-  console.log("请求拦截", config);
+  // console.log("请求拦截", config);
   return config;
 }, error => {
   return Promise.reject(error);

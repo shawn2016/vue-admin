@@ -1,1 +1,6 @@
-export formatDate from './date.js';
+import formatDate from './date'
+import {refUserRoleCode} from './commonFilter'
+export default {
+    formatDate,
+    refUserRoleCode
+}
