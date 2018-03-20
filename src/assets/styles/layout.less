@@ -1,0 +1,73 @@
+.vue-layout-sider{
+    -webkit-transition: all .2s;
+    transition: all .2s;
+    position: relative;
+    background: #001529;
+    min-width: 0;
+    position: fixed;
+    top:0;
+    z-index: 20;
+    height: 100%;
+    overflow: auto;
+    .vue-layout-logo{
+        height: 60px;
+        position: relative;
+        line-height: 60px;
+        padding-left: 24px;
+        -webkit-transition: all .3s;
+        transition: all .3s;
+        background: #002140;
+        overflow: hidden;
+    }
+    .vue-layout-menu{
+        width: 100%;
+        height: 100%;
+        position: absolute;
+    }
+}
+.vue-layout-wapper{
+    margin-left: 256px;
+    margin-top: 60px;
+}
+.vue-layout-nav{
+    height: 60px;
+    position: absolute;
+    top: 0;
+    background-color: #fff;
+    width: 100%;
+    left: 0;
+    padding-left: 256px;
+    padding-right: 12px;
+    .vue-layout-action-trigger{
+        line-height: 60px;
+        width: 60px;
+        text-align: center;
+        font-size: 20px;
+        cursor: pointer;
+        transition: all .3s,padding 0s;
+        &:hover{
+            background: #e6f7ff;
+        }    
+    }
+    .vue-layout-nav-fr{
+        line-height: 60px;
+        .vue-layout-nav-li{
+           list-style-type: none;
+           display: inline-block;
+           padding: 0 10px;
+           cursor: pointer;
+           i{
+               font-size: 20px;
+           }
+           &:hover{
+            background: #e6f7ff;
+           }
+        }
+        .username{
+            font-size: 12px;
+        }
+    }
+}
+.vue-layout-body{
+    margin-top: 60px;
+}
