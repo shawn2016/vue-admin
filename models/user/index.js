@@ -8,7 +8,8 @@ const heroSchema = mongoose.Schema({
   refUserRoleCode: String,
   status: Number,
   userDuty: String,
-  createTime:Date
+  createTime: Date,
+  password: String
 }, { collection: 'user' })
 //这里mongoose.Schema要写上第二个参数，明确指定到数据库中的哪个表取数据
 

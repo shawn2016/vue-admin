@@ -23,13 +23,10 @@ export default function fetch({
   method = "GET",
   data
 }) {
-  if (data && JSON.stringify(data) !== "{}" && (method === "POST" || method === "post")) {
-    data = qs.stringify(data);
-  }
   return axios({
     method,
     url,
-    data: qs.stringify(data),
+    data,
     timeout: 10000
   }).then(
     (res) => {

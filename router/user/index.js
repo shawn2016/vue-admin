@@ -3,49 +3,29 @@
 const express = require("express");
 //定义路由级中间件
 const router = express.Router();
+// 加工数据
+const filterData = require('../../utils/filterData')
 //引入数据模型模块
 const Hero = require("../../models/user");
-function filterStatus(obj) {
-    let data = {}
-    // table
-    if (obj && obj.type === 'table') {
-        data = {
-            respCode: "000000",
-            respMsg: "查询成功",
-            values: obj.data,
-            pagenation: {
-                itemCount: 8,
-                pageCount: 1,
-                pageNo: 1,
-                pageSize: 10
-            }
-        }
-        // 删除
-    } else if (obj && obj.type === 'delete') {
-        data = {
-            respCode: "000000",
-            respMsg: "删除成功"
-        }
-    }
-    return obj.res.json(data);
-}
+
 // 查询所有英雄信息路由
 router.get("/list", (req, res) => {
     Hero.find({})
-        .sort({ update_at: -1 })
+        .sort({ _id: -1 })
         .then(user => {
-            filterStatus({
-                res,
-                data: user,
-                pagenation: {},
-                type: "table",
-                status: "SUCCESS"
+            var obj = filterData({
+                values: user,
+                pagenation: {}
             })
+            res.json(obj)
         })
         .catch(err => {
             res.json(err);
         });
 });
+
+// 分页
+
 
 // 通过ObjectId查询单个英雄信息路由
 router.get("/list/:id", (req, res) => {
@@ -112,20 +92,54 @@ router.put("/addpic/:id", (req, res) => {
 
 //删除一条英雄信息路由
 router.delete("/list/:id", (req, res) => {
-    console.log(req.params.id)    
+    console.log(req.params.id)
     Hero.findOneAndRemove({
         _id: req.params.id
     })
         .then(hero => {
             console.log(hero)
-            filterStatus({
-                res,
-                type: "delete",
-                status: "SUCCESS"
+            filterData({
+                res
             })
         })
         .catch(err => res.json(err));
 });
+
+router.post("/create", function (req, res) {
+    Hero.findOne({ "user": req.body.userCode }, function (err, doc) {
+        if (doc) {
+            filterData({
+                res,
+                respCode: "900000",
+                respMsg: "用户已存在"
+            })
+            return false;
+        }
+        Hero.create({
+            name: req.body.name,
+            userCode: req.body.userCode,
+            userName: req.body.userName,
+            identifyNo: req.body.identifyNo,
+            refUserRoleCode: req.body.refUserRoleCode,
+            status: req.body.status,
+            userDuty: req.body.userDuty,
+            createTime: +new Date,
+            password: req.body.password,
+        }, function (err, doc) {
+            if (err) {
+                console.log(err)
+                return false;
+            }
+            if (doc) {
+                filterData({
+                    res
+                })
+                return false;
+            }
+
+        })
+    })
+})
 
 module.exports = router;
 

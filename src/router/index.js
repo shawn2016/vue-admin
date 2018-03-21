@@ -26,6 +26,14 @@ const router = [
     meta: {
       title: '用户管理'
     }
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: () => import('@/pages/register'),
+    meta: {
+      title: '注册'
+    }
   }
 ]
 export default router
