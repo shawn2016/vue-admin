@@ -1,5 +1,5 @@
 module.exports =  {
-    mongodb : "mongodb://localhost:27017/myDbs"
+    mongodb : "mongodb://localhost:27017/vueAdmin"
   }
   
   

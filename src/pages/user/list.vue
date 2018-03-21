@@ -1,63 +1,86 @@
 <template>
-<i-layout>
-      <i-breadcrumb>
-          <Button class="fr vue-back-btn" shape="circle">返回</Button>
-      </i-breadcrumb>
-               
-  <div class="vue-panel">
-        <Form :model="formItem" :label-width="80">
-           <Row>
-           <Col span="8">
-        <FormItem label="Input">
-            <Input v-model="formItem.input" placeholder="Enter something..."></Input>
-        </FormItem>
-        </Col>
-           <Col span="8">
-        <FormItem label="Select">
-            <Select v-model="formItem.select">
-                <Option value="beijing">New York</Option>
-                <Option value="shanghai">London</Option>
-                <Option value="shenzhen">Sydney</Option>
-            </Select>
-        </FormItem>
-        </Col>
-        </Row>
+  <i-layout>
+    <i-breadcrumb>
+      <Button class="fr vue-back-btn" shape="circle">返回</Button>
+    </i-breadcrumb>
+
+    <div class="vue-panel">
+      <Form :model="formItem" :label-width="80">
         <Row>
-        <FormItem>
-            <Button type="primary">Submit</Button>
-            <Button type="ghost" style="margin-left: 8px">Cancel</Button>
-        </FormItem>
+          <Col :xs="24" :sm="24" :md="8" :lg="8">
+          <FormItem label="创建日期:">
+            <DatePicker style="width:100%" :value="value2" format="yyyy-MM-dd" type="daterange" placement="bottom-end" placeholder="请选择日期"></DatePicker>
+          </FormItem>
+          </Col>
+          <Col :xs="24" :sm="24" :md="8" :lg="8">
+          <FormItem label="用户姓名:">
+            <Input v-model="value14" placeholder="请输入用户姓名" clearable></Input>
+          </FormItem>
+          </Col>
+          <Col :xs="24" :sm="24" :md="8" :lg="8">
+          <FormItem label="身份证号:">
+            <Input v-model="value14" placeholder="请输入身份证号" clearable></Input>
+          </FormItem>
+          </Col>
+          <Col :xs="24" :sm="24" :md="8" :lg="8">
+          <FormItem label="用户类型:">
+            <Select v-model="formItem.select">
+              <Option value="beijing">New York</Option>
+              <Option value="shanghai">London</Option>
+              <Option value="shenzhen">Sydney</Option>
+            </Select>
+          </FormItem>
+          </Col>
+          <Col :xs="24" :sm="24" :md="8" :lg="8">
+          <FormItem label="用户状态:">
+            <Select v-model="formItem.select">
+              <Option value="beijing">New York</Option>
+              <Option value="shanghai">London</Option>
+              <Option value="shenzhen">Sydney</Option>
+            </Select>
+          </FormItem>
+          </Col>
+          <Col :xs="24" :sm="24" :md="8" :lg="8">
+          <FormItem label="职务:">
+            <Input v-model="value14" placeholder="请输入职务" clearable></Input>
+          </FormItem>
+          </Col>
         </Row>
-    </Form>
-  </div>
-  <div class="vue-panel">
-    <Table :loading="tableLoading" :data="tableData1" :columns="tableColumns1" stripe></Table>
-    <div style="margin: 10px;overflow: hidden">
-        <div style="float: right;">
-            <Page :total="100" :current="1" @on-change="changePage"></Page>
-        </div>
+        <FormItem>
+          <Button type="primary" style="width:80px" long shape="circle">查询</Button>
+          <Button type="ghost" style="width:80px;margin-left: 8px" shape="circle">清除</Button>
+        </FormItem>
+      </Form>
     </div>
+    <div class="vue-panel-table">
+      <nav-content>
+        <Button class="fr vue-back-btn" shape="circle">返回</Button>
+      </nav-content>
+      <Table :loading="tableLoading" :data="tableData1" :columns="tableColumns1" stripe></Table>
+      <div class="vue-panel-page">
+        <div style="float: right;">
+          <Page :total="100" :current="1" @on-change="changePage"></Page>
+        </div>
       </div>
-        <!-- 对话框 -->
-      
-  <Modal
-        v-model="modal6"
-        :title="modalTitle"
-        :loading="modalLoading"
-        @on-ok="asyncOK">
-        <p>{{modalContent}}</p>
+    </div>
+    <!-- 对话框 -->
+
+    <Modal v-model="modal6" :title="modalTitle" :loading="modalLoading" @on-ok="asyncOK">
+      <p>{{modalContent}}</p>
     </Modal>
-    </i-layout>
+  </i-layout>
 </template>
 <script>
 import iLayout from "../../components/layout.vue";
 import iBreadcrumb from "../../components/breadcrumb.vue";
+import navContent from "../../components/navcontent.vue";
 import filters from "../../filters";
 export default {
   name: "userlist",
   components: {
     iLayout,
-    iBreadcrumb
+    iBreadcrumb,
+    navContent
   },
   filters: {
     formatDate(time) {
@@ -67,6 +90,8 @@ export default {
   },
   data() {
     return {
+      value2: "",
+      value14: "",
       tableLoading: false,
       modal6: false,
       // 对话框
@@ -178,7 +203,7 @@ export default {
                   on: {
                     click: () => {
                       this.openModal({
-                        id: params.row.id,
+                        id: params.row._id,
                         modalType: "delete",
                         modalTitle: "提示",
                         modalContent: "此操作将永久删除该文件, 是否继续?"
@@ -204,22 +229,29 @@ export default {
         data: {}
       });
       this.tableLoading = false;
+      console.log(res);
       if (res && res.respCode === "000000") {
-        if (res.body && res.body.values) {
-          this.tableData1 = res.body.values;
+        if (res.values) {
+          this.tableData1 = res.values;
         }
       }
     },
     // 删除用户
     async deleteUser(id) {
+      console.log(id)
       const res = await this.$fetch({
         url: `/user/list/${id}`,
         method: "delete",
         data: {}
       });
+      this.modal6 = false;
       this.modalLoading = false;
-      this.$Message.success("删除成功");
-      console.log(res);
+      if (res && res.respCode === "000000") {
+        this.$Message.success(res.respMsg);
+        this.getList();
+      } else {
+        this.$Message.error(res.respMsg);
+      }
     },
     // 分页
     changePage() {},
@@ -229,7 +261,7 @@ export default {
       this.modalTitle = obj.modalTitle;
       this.modalContent = obj.modalContent;
       this.modalType = obj.modalType;
-      this.modalId = obj.modalType;
+      this.modalId = obj.id;
     },
     //对话框 is-ok
     asyncOK() {
