@@ -76,7 +76,7 @@ import iBreadcrumb from "../../components/breadcrumb.vue";
 import navContent from "../../components/navcontent.vue";
 import filters from "../../filters";
 export default {
-  name: "userlist",
+  name: "userManage",
   components: {
     iLayout,
     iBreadcrumb,
@@ -169,7 +169,6 @@ export default {
           title: "操作",
           key: "edit",
           render: (h, params) => {
-            console.log(params);
             return h("div", [
               h(
                 "Button",
@@ -229,7 +228,6 @@ export default {
         data: {}
       });
       this.tableLoading = false;
-      console.log(res);
       if (res && res.respCode === "000000") {
         if (res.values) {
           this.tableData1 = res.values;
@@ -238,7 +236,6 @@ export default {
     },
     // 删除用户
     async deleteUser(id) {
-      console.log(id)
       const res = await this.$fetch({
         url: `/user/list/${id}`,
         method: "delete",

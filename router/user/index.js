@@ -90,29 +90,28 @@ router.put("/addpic/:id", (req, res) => {
         .catch(err => res.json(err));
 });
 
-//删除一条英雄信息路由
+//删除一条用户信息
 router.delete("/list/:id", (req, res) => {
-    console.log(req.params.id)
     Hero.findOneAndRemove({
         _id: req.params.id
     })
         .then(hero => {
-            console.log(hero)
-            filterData({
-                res
+            let obj = filterData({
+                resMsg: "删除成功"
             })
+            res.json(obj)
         })
         .catch(err => res.json(err));
 });
 
 router.post("/create", function (req, res) {
-    Hero.findOne({ "user": req.body.userCode }, function (err, doc) {
+    Hero.findOne({ "userCode": req.body.userCode }, function (err, doc) {
         if (doc) {
-            filterData({
-                res,
+            let obj = filterData({
                 respCode: "900000",
                 respMsg: "用户已存在"
             })
+            res.json(obj)
             return false;
         }
         Hero.create({
@@ -131,14 +130,50 @@ router.post("/create", function (req, res) {
                 return false;
             }
             if (doc) {
-                filterData({
-                    res
+                let obj = filterData({
+                    respMsg: "注册成功"
                 })
+                res.json(obj)
                 return false;
             }
 
         })
     })
+})
+
+router.post("/login", function (req, res) {
+    Hero.find({
+        "userCode": req.body.userCode,
+        "password": req.body.password
+    },
+        function (err, doc) {
+            console.log(doc)
+
+            if (err) {
+
+                let obj = filterData({
+                    respMsg: "用户名或密码错误",
+                    respCode: "900000"
+                })
+                res.json(obj)
+                return false;
+            }
+            if (doc.length == 0) {
+                let obj = filterData({
+                    respMsg: "用户名或密码错误",
+                    respCode: "900000"
+                })
+                res.json(obj)
+                return false;
+            } else {
+                let obj = filterData({
+                    respMsg: "登录成功"
+                })
+                res.json(obj)
+            }
+
+        })
+
 })
 
 module.exports = router;

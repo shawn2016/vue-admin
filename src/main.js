@@ -9,10 +9,15 @@ import Env from './config/env';
 import Util from './libs/util'
 import bus from './components/bus'
 import 'iview/dist/styles/iview.css';
+import ECharts from 'vue-echarts/components/ECharts'
+import 'echarts/lib/chart/line';
 import fetch from './libs/fetch'
 Vue.config.productionTip = false
 Vue.use(iView)
 Vue.use(VueRouter);
+// Vue.use(ECharts)
+Vue.component('chart', ECharts)
+
 // 将API方法绑定到全局
 Vue.prototype.$fetch = fetch;
 // 开启debug模式

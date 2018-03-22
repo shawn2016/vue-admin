@@ -39,6 +39,7 @@
 </template>
 <script>
 import liziInit from "../../libs/tree/buildtree";
+import md5 from 'js-md5';
 export default {
   data() {
     const password = (rule, value, callback) => {
@@ -110,15 +111,18 @@ export default {
         method: "post",
         data: {
           userCode: this.formInline.user,
-          password: this.formInline.password
+          password: md5(this.formInline.password)
         }
       });
       this.tableLoading = false;
       console.log(res);
       if (res && res.respCode === "000000") {
-        if (res.values) {
-          this.tableData1 = res.values;
-        }
+        this.$Message.success(res.respMsg);
+        setTimeout(() => {
+          this.$router.push("/login");
+        }, 2000);
+      } else {
+        this.$Message.error(res.respMsg);
       }
     },
     handleSubmit(name) {
@@ -126,7 +130,7 @@ export default {
         if (valid) {
           this.register();
         } else {
-          this.$Message.error("登录失败");
+          this.$Message.error("注册失败");
         }
       });
     }
