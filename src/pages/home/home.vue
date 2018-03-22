@@ -1,13 +1,5 @@
 <template>
   <i-layout>
-    <!-- <chart :options="polar"></chart> -->
-     <!-- <chart 
-        :options="bar"
-        :init-options="initOptions"
-        ref="bar"
-        theme="ovilia-green"
-        auto-resize
-      /> -->
     <div class="vue-dashboard-panel">
       <Row :gutter="16">
         <Col :md="6">
@@ -16,22 +8,22 @@
           <p slot="extra">单位:(元)</p>
           <p class="money">¥ 126,560</p>
           <p>
-            <div class="content___2bOfA" style="height: 46px;">
-              <div class="contentFixed___nL801">
-                <div class="trendItem___2r2dT" title="" style="margin-right: 16px;">
+            <div class="dashbord-card-content">
+              <div class="dashbord-card-block">
+                <div class="trendItem" title="" style="margin-right: 16px;">
                   <span>周同比
                     <span class="trendText___HsrVC">12%</span>
                   </span>
-                  <span class="up___2EwY8">
-                    <i class="anticon anticon-caret-up"></i>
+                  <span class="up">
+                    <Icon type="arrow-up-b"></Icon>
                   </span>
                 </div>
-                <div class="trendItem___2r2dT" title="">
+                <div class="trendItem" title="">
                   <span>日环比
                     <span class="trendText___HsrVC">11%</span>
                   </span>
-                  <span class="down___35xDq">
-                    <i class="anticon anticon-caret-down"></i>
+                  <span class="down">
+                    <Icon type="arrow-down-b"></Icon>
                   </span>
                 </div>
               </div>
@@ -40,29 +32,113 @@
         </Card>
         </Col>
         <Col :md="6">
-        <Card dis-hover :bordered="false">
-          <p slot="title">可用授信额度</p>
-          <p>Content of no border type. Content of no border type. Content of no border type. Content of no border type. </p>
+        <Card bordered="false" dis-hover :bordered="false">
+          <p slot="title">账户余额</p>
+          <p slot="extra">单位:(元)</p>
+          <p class="money">¥ 126,560</p>
+          <p>
+            <div class="dashbord-card-content">
+              <div class="dashbord-card-block">
+                <div class="trendItem" title="" style="margin-right: 16px;">
+                  <span>周同比
+                    <span class="trendText___HsrVC">12%</span>
+                  </span>
+                  <span class="up">
+                    <Icon type="arrow-up-b"></Icon>
+                  </span>
+                </div>
+                <div class="trendItem" title="">
+                  <span>日环比
+                    <span class="trendText___HsrVC">11%</span>
+                  </span>
+                  <span class="down">
+                    <Icon type="arrow-down-b"></Icon>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </p>
         </Card>
         </Col>
         <Col :md="6">
-        <Card dis-hover :bordered="false">
-          <p slot="title">总销售额</p>
-          <p slot="extra">总销售额</p>
-          <p>Content of no border type. Content of no border type. Content of no border type. Content of no border type. </p>
+        <Card bordered="false" dis-hover :bordered="false">
+          <p slot="title">账户余额</p>
+          <p slot="extra">单位:(元)</p>
+          <p class="money">¥ 126,560</p>
+          <p>
+            <div class="dashbord-card-content">
+              <div class="dashbord-card-block">
+                <div class="trendItem" title="" style="margin-right: 16px;">
+                  <span>周同比
+                    <span class="trendText___HsrVC">12%</span>
+                  </span>
+                  <span class="up">
+                    <Icon type="arrow-up-b"></Icon>
+                  </span>
+                </div>
+                <div class="trendItem" title="">
+                  <span>日环比
+                    <span class="trendText___HsrVC">11%</span>
+                  </span>
+                  <span class="down">
+                    <Icon type="arrow-down-b"></Icon>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </p>
         </Card>
         </Col>
-        <Col dis-hover :md="6">
-        <Card :bordered="false">
-          <p slot="title">No border title</p>
-          <p>Content of no border type. Content of no border type. Content of no border type. Content of no border type. </p>
+        <Col :md="6">
+        <Card bordered="false" dis-hover :bordered="false">
+          <p slot="title">账户余额</p>
+          <p slot="extra">单位:(元)</p>
+          <p class="money">¥ 126,560</p>
+          <p>
+            <div class="dashbord-card-content">
+              <div class="dashbord-card-block">
+                <div class="trendItem" title="" style="margin-right: 16px;">
+                  <span>周同比
+                    <span class="trendText___HsrVC">12%</span>
+                  </span>
+                  <span class="up">
+                    <Icon type="arrow-up-b"></Icon>
+                  </span>
+                </div>
+                <div class="trendItem" title="">
+                  <span>日环比
+                    <span class="trendText___HsrVC">11%</span>
+                  </span>
+                  <span class="down">
+                    <Icon type="arrow-down-b"></Icon>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </p>
         </Card>
         </Col>
       </Row>
     </div>
+    <div class="vue-dashboard-panel">
+      <Row :gutter="10">
+        <Col :xs="24" :sm="24" :md="12" :lg="12">
+        <Card bordered="false" dis-hover :bordered="false">
+          <chart :options="bar" :init-options="initOptions" ref="bar" theme="ovilia-green" auto-resize style="width:100%" />
+        </Card>
+        </Col>
+        <Col :xs="24" :sm="24" :md="12" :lg="12">
+        <Card bordered="false" dis-hover :bordered="false">
+          <chart :options="scatter" :init-options="initOptions" auto-resize style="width:100%" />
+        </Card>
+
+        </Col>
+      </Row>
+    </div>
+
     <div class="vue-panel-table">
       <nav-content>
-        <Button class="fr vue-back-btn" shape="circle">返回</Button>
+        <Button class="fr vue-back-btn" shape="circle">新增用户</Button>
       </nav-content>
       <Table :loading="tableLoading" :data="tableData1" :columns="tableColumns1" stripe></Table>
       <div class="vue-panel-page">
@@ -79,67 +155,45 @@
   </i-layout>
 </template>
 <script>
-import iLayout from "../../components/layout.vue";
-import iBreadcrumb from "../../components/breadcrumb.vue";
+import chart from "vue-echarts/components/ECharts";
+
+import qs from "qs";
 import navContent from "../../components/navcontent.vue";
+import iLayout from "../../components/layout.vue";
 import filters from "../../filters";
+import getBar from "../../data/bar";
+import scatter from "../../data/scatter";
+import theme from "../../data/theme.json";
+
+import 'echarts/lib/chart/bar'
+import 'echarts/lib/chart/line'
+import 'echarts/lib/chart/radar'
+import 'echarts/lib/chart/scatter'
+import 'echarts/lib/chart/effectScatter'
+import 'echarts/lib/component/tooltip'
+import 'echarts/lib/component/polar'
+import 'echarts/lib/component/geo'
+import 'echarts/lib/component/legend'
+import 'echarts/lib/component/title'
+import 'echarts/lib/component/visualMap'
+import 'echarts/lib/component/dataset'
+chart.registerTheme("ovilia-green", theme);
 export default {
   name: "userManage",
   components: {
     iLayout,
-    iBreadcrumb,
-    navContent
-  },
-  filters: {
-    formatDate(time) {
-      let date = new Date(time);
-      return filters.formatDate(date, "yyyy-MM-dd hh:mm");
-    }
+    navContent,
+    chart
   },
   data() {
-    let data = [];
-
-    for (let i = 0; i <= 360; i++) {
-      let t = i / 180 * Math.PI;
-      let r = Math.sin(2 * t) * Math.cos(2 * t);
-      data.push([r, i]);
-    }
-
+    let options = qs.parse(location.search, { ignoreQueryPrefix: true });
     return {
-      polar: {
-        title: {
-          text: "极坐标双数值轴"
-        },
-        legend: {
-          data: ["line"]
-        },
-        polar: {
-          center: ["50%", "54%"]
-        },
-        tooltip: {
-          trigger: "axis",
-          axisPointer: {
-            type: "cross"
-          }
-        },
-        angleAxis: {
-          type: "value",
-          startAngle: 0
-        },
-        radiusAxis: {
-          min: 0
-        },
-        series: [
-          {
-            coordinateSystem: "polar",
-            name: "line",
-            type: "line",
-            showSymbol: false,
-            data: data
-          }
-        ],
-        animationDuration: 2000
+      options,
+      initOptions: {
+        renderer: options.renderer || "canvas"
       },
+      bar: getBar(),
+      scatter,
       value2: "",
       value14: "",
       tableLoading: false,
@@ -149,17 +203,6 @@ export default {
       modalContent: "",
       modalTitle: "",
       modalType: "",
-      formItem: {
-        input: "",
-        select: "",
-        radio: "male",
-        checkbox: [],
-        switch: true,
-        date: "",
-        time: "",
-        slider: [20, 50],
-        textarea: ""
-      },
       tableData1: [],
       tableColumns1: [
         {
