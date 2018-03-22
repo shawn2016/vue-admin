@@ -42,7 +42,10 @@ filterData(obj){
 999999	系统异常		系统异常，请稍后重试或联系客服人员系统异常
 ```
 
-
+### 效果
+<p align="center">
+<a href="https://github.com/shawn2016/vue-admin.git"><img src="https://github.com/shawn2016/vue-admin/blob/master/static/dashboard.png" /></a>
+</p>
 
 ## Build Setup
 
