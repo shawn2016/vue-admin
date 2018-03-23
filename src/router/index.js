@@ -15,7 +15,8 @@ const routers = {
       meta: {
         title: '注册'
       }
-    }
+    },
+    { path: '*', redirect: '/home/home' }
   ],
   home: [
     {
@@ -33,6 +34,13 @@ const routers = {
     component: () => import('@/pages/systemManage/userManage'),
     meta: {
       title: '用户管理'
+    }
+  }, {
+    path: '/systemManage/addUser',
+    name: 'addUser',
+    component: () => import('@/pages/systemManage/addUser'),
+    meta: {
+      title: '新增用户'
     }
   }]
 }

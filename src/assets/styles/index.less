@@ -12,6 +12,11 @@ body{
     padding: 15px;
     margin: 0 10px 10px;
 }
+.vue-panel-desc{
+    background: #fff;
+    padding: 30px 20px;
+    margin: 0 10px 10px;
+}
 .vue-panel-table{
     margin: 0 10px 10px;
 }
@@ -28,6 +33,9 @@ body{
 }
 .vue-dashboard-panel{
     padding: 10px;
+    &+.vue-dashboard-panel{
+        padding-top: 0px;
+    }
     .money{
         overflow: hidden;
     text-overflow: ellipsis;

@@ -1,6 +1,7 @@
 import formatDate from './date'
-import {refUserRoleCode} from './commonFilter'
+import {refUserRoleCode,status} from './commonFilter'
 export default {
     formatDate,
-    refUserRoleCode
+    refUserRoleCode,
+    status
 }

@@ -1,7 +1,6 @@
 <template>
   <i-layout>
     <i-breadcrumb>
-      <Button class="fr vue-back-btn" shape="circle">返回</Button>
     </i-breadcrumb>
 
     <div class="vue-panel">
@@ -9,52 +8,52 @@
         <Row>
           <Col :xs="24" :sm="24" :md="8" :lg="8">
           <FormItem label="创建日期:">
-            <DatePicker style="width:100%" :value="value2" format="yyyy-MM-dd" type="daterange" placement="bottom-end" placeholder="请选择日期"></DatePicker>
+            <DatePicker style="width:100%" v-model="formItem.createTime" format="yyyy-MM-dd" type="daterange" placement="bottom-start" placeholder="请选择日期"></DatePicker>
           </FormItem>
           </Col>
           <Col :xs="24" :sm="24" :md="8" :lg="8">
           <FormItem label="用户姓名:">
-            <Input v-model="value14" placeholder="请输入用户姓名" clearable></Input>
+            <Input v-model="formItem.userName" placeholder="请输入用户姓名" clearable></Input>
           </FormItem>
           </Col>
           <Col :xs="24" :sm="24" :md="8" :lg="8">
           <FormItem label="身份证号:">
-            <Input v-model="value14" placeholder="请输入身份证号" clearable></Input>
+            <Input v-model="formItem.identifyNo" placeholder="请输入身份证号" clearable></Input>
           </FormItem>
           </Col>
           <Col :xs="24" :sm="24" :md="8" :lg="8">
           <FormItem label="用户类型:">
-            <Select v-model="formItem.select">
-              <Option value="beijing">New York</Option>
-              <Option value="shanghai">London</Option>
-              <Option value="shenzhen">Sydney</Option>
+            <Select v-model="formItem.refUserRoleCode">
+              <Option value="USER">普通用户</Option>
+              <Option value="ADMIN">管理员</Option>
             </Select>
           </FormItem>
           </Col>
           <Col :xs="24" :sm="24" :md="8" :lg="8">
           <FormItem label="用户状态:">
-            <Select v-model="formItem.select">
-              <Option value="beijing">New York</Option>
-              <Option value="shanghai">London</Option>
-              <Option value="shenzhen">Sydney</Option>
+            <Select v-model="formItem.status">
+              <Option value="500">禁用</Option>
+              <Option value="100">启用</Option>
             </Select>
           </FormItem>
           </Col>
           <Col :xs="24" :sm="24" :md="8" :lg="8">
-          <FormItem label="职务:">
-            <Input v-model="value14" placeholder="请输入职务" clearable></Input>
+          <FormItem label="用户名:">
+            <Input v-model="formItem.userCode" placeholder="请输入用户名" clearable></Input>
           </FormItem>
           </Col>
         </Row>
         <FormItem>
-          <Button type="primary" style="width:80px" long shape="circle">查询</Button>
-          <Button type="ghost" style="width:80px;margin-left: 8px" shape="circle">清除</Button>
+          <Button type="primary" @click="getList" style="width:80px" long shape="circle">查询</Button>
+          <Button type="ghost" style="width:80px;margin-left: 8px" @click="clearForm" shape="circle">清除</Button>
         </FormItem>
       </Form>
     </div>
     <div class="vue-panel-table">
       <nav-content>
-        <Button class="fr vue-back-btn" shape="circle">返回</Button>
+        <router-link to="/systemManage/addUser">
+          <Button class="fr vue-back-btn" shape="circle">新增用户</Button>
+        </router-link>
       </nav-content>
       <Table :loading="tableLoading" :data="tableData1" :columns="tableColumns1" stripe></Table>
       <div class="vue-panel-page">
@@ -99,17 +98,7 @@ export default {
       modalContent: "",
       modalTitle: "",
       modalType: "",
-      formItem: {
-        input: "",
-        select: "",
-        radio: "male",
-        checkbox: [],
-        switch: true,
-        date: "",
-        time: "",
-        slider: [20, 50],
-        textarea: ""
-      },
+      formItem: {},
       tableData1: [],
       tableColumns1: [
         {
@@ -163,10 +152,18 @@ export default {
         },
         {
           title: "用户状态",
-          key: "status"
+          key: "status",
+          render: (h, params) => {
+            const row = params.row;
+            const status = row.status
+              ? filters.status(row.status)
+              : row.status;
+            return h("span", status);
+          }
         },
         {
           title: "操作",
+          width: 180,
           key: "edit",
           render: (h, params) => {
             return h("div", [
@@ -182,11 +179,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.openModal({
-                        modalType: "edit",
-                        modalTitle: "提示",
-                        modalContent: "此操作将永久删除该文件, 是否继续?"
-                      });
+                      this.addUser(params.row._id);
                     }
                   }
                 },
@@ -198,6 +191,9 @@ export default {
                   props: {
                     type: "error",
                     size: "small"
+                  },
+                  style: {
+                    marginRight: "5px"
                   },
                   on: {
                     click: () => {
@@ -211,6 +207,26 @@ export default {
                   }
                 },
                 "删除"
+              ),
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "default",
+                    size: "small"
+                  },
+                  on: {
+                    click: () => {
+                      this.openModal({
+                        id: params.row._id,
+                        modalType: "delete",
+                        modalTitle: "提示",
+                        modalContent: "此操作将永久删除该文件, 是否继续?"
+                      });
+                    }
+                  }
+                },
+                "详情"
               )
             ]);
           }
@@ -224,8 +240,8 @@ export default {
       this.tableLoading = true;
       const res = await this.$fetch({
         url: "/user/list",
-        method: "get",
-        data: {}
+        method: "post",
+        data: this.formItem
       });
       this.tableLoading = false;
       if (res && res.respCode === "000000") {
@@ -233,6 +249,9 @@ export default {
           this.tableData1 = res.values;
         }
       }
+    },
+    clearForm() {
+      this.formItem = {};
     },
     // 删除用户
     async deleteUser(id) {
@@ -259,6 +278,11 @@ export default {
       this.modalContent = obj.modalContent;
       this.modalType = obj.modalType;
       this.modalId = obj.id;
+    },
+    addUser(id) {
+      this.$router.push({
+        path:`/systemManage/addUser/${id}`
+      });
     },
     //对话框 is-ok
     asyncOK() {

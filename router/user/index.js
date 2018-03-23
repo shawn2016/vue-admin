@@ -9,9 +9,19 @@ const filterData = require('../../utils/filterData')
 const Hero = require("../../models/user");
 
 // 查询所有英雄信息路由
-router.get("/list", (req, res) => {
-    Hero.find({})
+// 上例将查询结果按时间倒序，因为 MongoDB 的 _id 生成算法中已经包含了当前的时间，所以这样写不仅没问题，也是推荐的按时间排序的写法。
+router.post("/list", (req, res) => {
+    if (req.body && req.body.createTime) {
+        let createTime = {
+            "$gte": req.body.createTime[0],
+            "$lt": req.body.createTime[1]
+        }
+        req.body.createTime = createTime
+    }
+    console.log(req.body)
+    Hero.find(req.body)
         .sort({ _id: -1 })
+        .limit(10)
         .then(user => {
             var obj = filterData({
                 values: user,
@@ -115,14 +125,16 @@ router.post("/create", function (req, res) {
             return false;
         }
         Hero.create({
-            name: req.body.name,
             userCode: req.body.userCode,
             userName: req.body.userName,
             identifyNo: req.body.identifyNo,
             refUserRoleCode: req.body.refUserRoleCode,
             status: req.body.status,
             userDuty: req.body.userDuty,
-            createTime: +new Date,
+            phonenum: req.body.phonenum,
+            createTime: req.body.createTime,
+            updateTime: req.body.updateTime,
+            desc: req.body.desc,
             password: req.body.password,
         }, function (err, doc) {
             if (err) {

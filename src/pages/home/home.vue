@@ -1,7 +1,7 @@
 <template>
   <i-layout>
     <div class="vue-dashboard-panel">
-      <Row :gutter="16">
+      <Row :gutter="10">
         <Col :md="6">
         <Card bordered="false" dis-hover :bordered="false">
           <p slot="title">账户余额</p>

@@ -8,3 +8,13 @@ export function refUserRoleCode(str = "") {
             return ' '
     }
 }
+export function status(str = "") {
+    switch (str) {
+        case 100:
+            return '启用'
+        case 500:
+            return '禁用'
+        default:
+            return ' '
+    }
+}
