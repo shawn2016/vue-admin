@@ -44,16 +44,7 @@ const routers = {
     }
   }]
 }
-function getRouters(params) {
-  let router = []
-  for (const i in routers) {
-    for (let j = 0; j < routers[i].length; j++) {
-      const element = routers[i][j];
-      router.push(element)
-    }
-  }
-  return router
-}
+
 export let menuGroup = {
   home: {
     name: "首页",
@@ -65,10 +56,18 @@ export let menuGroup = {
   }
 };
 
-
-let router = getRouters()
+function getRouters() {
+  let router = []
+  for (const i in routers) {
+    for (let j = 0; j < routers[i].length; j++) {
+      const element = routers[i][j];
+      router.push(element)
+    }
+  }
+  return router
+}
 export let routerArray = function () {
   delete (routers.common)
   return routers
 }
-export default router
+export default getRouters()
