@@ -1,7 +1,7 @@
 <template>
     <div>
         <i-layout>
-            <i-breadcrumb>
+            <i-breadcrumb :t2="breadcrumbTitle">
                 <Button class="fr vue-back-btn" @click="$router.go(-1)" shape="circle">返回</Button>
             </i-breadcrumb>
             <div class="vue-panel-desc">
@@ -9,7 +9,8 @@
                     <Col span="12" :md="14" :lg="12" :xs="24" :sm="24">
                     <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
                         <FormItem label="用户名:" prop="userCode">
-                            <Input v-model="formValidate.userCode" placeholder="请输入用户名"></Input>
+                            <Input v-if="!$route.query.userCode" v-model="formValidate.userCode" placeholder="请输入用户名"></Input>
+                            <label v-if="$route.query.userCode">{{formValidate.userCode}}</label>
                         </FormItem>
                         <FormItem label="用户姓名:" prop="userName">
                             <Input v-model="formValidate.userName" placeholder="请输入用户姓名"></Input>
@@ -34,10 +35,10 @@
                         </FormItem>
                         <FormItem label="职务:" prop="userDuty">
                             <Select v-model="formValidate.userDuty" placeholder="请选择职务">
-                                <Option value="qianduan">前端开发</Option>
-                                <Option value="php">php开发</Option>
-                                <Option value="java">java开发</Option>
-                                <Option value="python">python开发</Option>
+                                <Option value="前端开发">前端开发</Option>
+                                <Option value="php开发">php开发</Option>
+                                <Option value="java开发">java开发</Option>
+                                <Option value="python开发">python开发</Option>
 
                             </Select>
                         </FormItem>
@@ -59,6 +60,7 @@
 <script>
 import iLayout from "../../components/layout.vue";
 import iBreadcrumb from "../../components/breadcrumb.vue";
+import { searchUserInfo, updateUser, createUser } from "../../service/getData";
 import md5 from "js-md5";
 export default {
   name: "addUser",
@@ -74,6 +76,11 @@ export default {
           {
             required: true,
             message: "请输入用户名",
+            trigger: "blur"
+          },
+          {
+            pattern: /^(?!\d+$)(?![A-Za-z]+$)[a-zA-Z0-9]{6,20}$/,
+            message: "请输入6-20个数字和英文大小写字符",
             trigger: "blur"
           }
         ],
@@ -134,10 +141,27 @@ export default {
       }
     };
   },
-  mounted() {
-    this.message();
+  mounted() {},
+  created() {
+    if (this.$route.query && this.$route.query.userCode) {
+      this.formValidate.userCode = this.$route.query.userCode;
+      this.findUserInfo();
+      this.breadcrumbTitle="修改用户"      
+    } else {
+      // 新增用户时提示一下
+      this.breadcrumbTitle="新增用户"
+      this.message();
+    }
   },
   methods: {
+    async findUserInfo() {
+      const res = await searchUserInfo({
+        userCode: this.formValidate.userCode
+      });
+      if (res.respCode === "000000") {
+        this.formValidate = res.body;
+      }
+    },
     message() {
       this.$Notice.open({
         title: "温馨提示",
@@ -165,10 +189,23 @@ export default {
     },
     async register() {
       this.tableLoading = true;
-      const res = await this.$fetch({
-        url: "/user/create",
-        method: "post",
-        data: {
+      let res;
+      if (this.$route.query && this.$route.query.userCode) {
+        // 更新用户信息
+        res = await updateUser({
+          userCode: this.formValidate.userCode,
+          status: this.formValidate.status,
+          userDuty: this.formValidate.userDuty,
+          userName: this.formValidate.userName,
+          phonenum: this.formValidate.phonenum,
+          identifyNo: this.formValidate.identifyNo,
+          desc: this.formValidate.desc,
+          refUserRoleCode: this.formValidate.refUserRoleCode,
+          updateTime: +new Date()
+        });
+      } else {
+        // 新增用户
+        res = await createUser({
           userCode: this.formValidate.userCode,
           status: this.formValidate.status,
           userDuty: this.formValidate.userDuty,
@@ -180,10 +217,9 @@ export default {
           createTime: +new Date(),
           updateTime: +new Date(),
           password: md5("123456")
-        }
-      });
+        });
+      }
       this.tableLoading = false;
-      console.log(res);
       if (res && res.respCode === "000000") {
         this.$Message.success(res.respMsg);
         setTimeout(() => {
@@ -203,7 +239,11 @@ export default {
       });
     },
     handleReset(name) {
-      this.formValidate = {};
+      if (this.$route.query && this.$route.query.userCode) {
+        this.formValidate.userCode = this.$route.query.userCode;
+      } else {
+        this.formValidate = {};
+      }
       this.$refs[name].resetFields();
     }
   }

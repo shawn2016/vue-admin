@@ -84,7 +84,7 @@ export default {
   filters: {
     formatDate(time) {
       let date = new Date(time);
-      return filters.formatDate(date, "yyyy-MM-dd hh:mm");
+      return filters.formatDate(date, "yyyy-MM-dd hh:mm:ss");
     }
   },
   data() {
@@ -109,11 +109,12 @@ export default {
         },
         {
           title: "创建日期",
+          width: 150,          
           key: "createTime",
           render: (h, params) => {
             const row = params.row;
             const time = row.createTime
-              ? filters.formatDate(row.createTime, "yyyy-MM-dd hh:mm")
+              ? filters.formatDate(row.createTime, "yyyy-MM-dd hh:mm:ss")
               : "";
             return h("span", time);
           }
@@ -136,10 +137,6 @@ export default {
           key: "identifyNo"
         },
         {
-          title: "职务",
-          key: "userDuty"
-        },
-        {
           title: "用户类型",
           key: "refUserRoleCode",
           render: (h, params) => {
@@ -155,9 +152,7 @@ export default {
           key: "status",
           render: (h, params) => {
             const row = params.row;
-            const status = row.status
-              ? filters.status(row.status)
-              : row.status;
+            const status = row.status ? filters.status(row.status) : row.status;
             return h("span", status);
           }
         },
@@ -179,7 +174,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.addUser(params.row._id);
+                      this.editUser(params.row.userCode);
                     }
                   }
                 },
@@ -217,12 +212,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.openModal({
-                        id: params.row._id,
-                        modalType: "delete",
-                        modalTitle: "提示",
-                        modalContent: "此操作将永久删除该文件, 是否继续?"
-                      });
+                      this.goDesc(params.row.userCode);
                     }
                   }
                 },
@@ -279,9 +269,18 @@ export default {
       this.modalType = obj.modalType;
       this.modalId = obj.id;
     },
-    addUser(id) {
+    editUser(userCode) {
       this.$router.push({
-        path:`/systemManage/addUser/${id}`
+        name: "addUser",
+        path: "/systemManage/addUser",
+        query: { userCode }
+      });
+    },
+    goDesc(userCode) {
+      this.$router.push({
+        name: "userDesc",
+        path: "/systemManage/systemManage/userDesc",
+        query: { userCode }
       });
     },
     //对话框 is-ok

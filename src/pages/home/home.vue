@@ -138,14 +138,12 @@
 
     <div class="vue-panel-table">
       <nav-content>
-        <Button class="fr vue-back-btn" shape="circle">新增用户</Button>
+        <h3 class="fl">最新用户</h3>
+        <router-link to="/systemManage/addUser">
+          <Button class="fr vue-back-btn" shape="circle">新增用户</Button>
+        </router-link>
       </nav-content>
       <Table :loading="tableLoading" :data="tableData1" :columns="tableColumns1" stripe></Table>
-      <div class="vue-panel-page">
-        <div style="float: right;">
-          <Page :total="100" :current="1" @on-change="changePage"></Page>
-        </div>
-      </div>
     </div>
     <!-- 对话框 -->
 
@@ -164,19 +162,19 @@ import filters from "../../filters";
 import getBar from "../../data/bar";
 import scatter from "../../data/scatter";
 import theme from "../../data/theme.json";
-
-import 'echarts/lib/chart/bar'
-import 'echarts/lib/chart/line'
-import 'echarts/lib/chart/radar'
-import 'echarts/lib/chart/scatter'
-import 'echarts/lib/chart/effectScatter'
-import 'echarts/lib/component/tooltip'
-import 'echarts/lib/component/polar'
-import 'echarts/lib/component/geo'
-import 'echarts/lib/component/legend'
-import 'echarts/lib/component/title'
-import 'echarts/lib/component/visualMap'
-import 'echarts/lib/component/dataset'
+import { mapActions } from "vuex";
+import "echarts/lib/chart/bar";
+import "echarts/lib/chart/line";
+import "echarts/lib/chart/radar";
+import "echarts/lib/chart/scatter";
+import "echarts/lib/chart/effectScatter";
+import "echarts/lib/component/tooltip";
+import "echarts/lib/component/polar";
+import "echarts/lib/component/geo";
+import "echarts/lib/component/legend";
+import "echarts/lib/component/title";
+import "echarts/lib/component/visualMap";
+import "echarts/lib/component/dataset";
 chart.registerTheme("ovilia-green", theme);
 export default {
   name: "userManage",
@@ -317,7 +315,7 @@ export default {
       this.tableLoading = true;
       const res = await this.$fetch({
         url: "/user/list",
-        method: "get",
+        method: "post",
         data: {}
       });
       this.tableLoading = false;
@@ -359,10 +357,12 @@ export default {
       if (this.modalType === "delete") {
         this.deleteUser(this.modalId);
       }
-    }
+    },
+    ...mapActions(["getUserInfo"])
   },
   created() {
     this.getList();
+    this.getUserInfo();
   }
 };
 </script>

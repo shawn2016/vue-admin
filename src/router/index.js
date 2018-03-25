@@ -3,17 +3,9 @@ const routers = {
     {
       path: '/login',
       name: 'login',
-      component: () => import('@/pages/login'),
+      component: () => import('@/pages/login/login'),
       meta: {
         title: '登录'
-      }
-    },
-    {
-      path: '/register',
-      name: 'register',
-      component: () => import('@/pages/register'),
-      meta: {
-        title: '注册'
       }
     },
     { path: '*', redirect: '/home/home' }
@@ -41,6 +33,14 @@ const routers = {
     component: () => import('@/pages/systemManage/addUser'),
     meta: {
       title: '新增用户'
+    }
+  }, {
+    path: '/systemManage/userManage/userDesc',
+    name: 'userDesc',
+    component: () => import('@/pages/systemManage/userDesc'),
+    show:'false',
+    meta: {
+      title: '用户详情'
     }
   }]
 }

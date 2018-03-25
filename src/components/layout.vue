@@ -13,7 +13,7 @@
                             <Icon :type="value | menuFilterIcon"></Icon>
                             {{value | menuFilterName}}
                         </template>
-                        <router-link v-for="x in key" :title="x.path" :key="x.path" :to="x.path" class="ivu-menu-item" active-class="ivu-menu-item-active ivu-menu-item-selected">
+                        <router-link v-if="x.show!=='false'" v-for="x in key" :title="x.path" :key="x.path" :to="x.path" class="ivu-menu-item" active-class="ivu-menu-item-active ivu-menu-item-selected">
                             {{x.meta.title}}
                         </router-link>
                     </Submenu>
@@ -24,12 +24,7 @@
             <div class="vue-layout-nav">
                 <ul class="vue-layout-nav-fr fr">
                     <li class="vue-layout-nav-li">
-                        <Tooltip content="Bottom Center 文字提示" placement="bottom">
-                            <Icon type="ios-search"></Icon>
-                        </Tooltip>
-                    </li>
-                    <li class="vue-layout-nav-li">
-                        <Tooltip content="Bottom Center 文字提示" placement="bottom">
+                        <Tooltip content="帮助文档" placement="bottom">
                             <Icon type="ios-help-outline"></Icon>
                         </Tooltip>
                     </li>
@@ -40,22 +35,19 @@
                             </Badge>
                             <div class="api" slot="content">
                                 <Tabs value="name1">
-                                    <TabPane label="标签一" name="name1">标签一的内容</TabPane>
-                                    <TabPane label="标签二" name="name2">标签二的内容</TabPane>
-                                    <TabPane label="标签三" name="name3">标签三的内容</TabPane>
+                                    <TabPane label="通知(5)" name="name1">标签一的内容</TabPane>
+                                    <TabPane label="消息(3)" name="name2">标签二的内容</TabPane>
+                                    <TabPane label="待办(4)" name="name3">标签三的内容</TabPane>
                                 </Tabs>
                             </div>
                         </Poptip>
                     </li>
                     <li class="vue-layout-nav-li">
-                        <Dropdown>
-                            <Avatar src="https://i.loli.net/2017/08/21/599a521472424.jpg" />daizhixinaf
+                        <Dropdown @on-click="click">
+                            <Avatar src="https://i.loli.net/2017/08/21/599a521472424.jpg" />{{userCode}}
                             <DropdownMenu slot="list">
-                                <DropdownItem>驴打滚</DropdownItem>
-                                <DropdownItem>炸酱面</DropdownItem>
-                                <DropdownItem>豆汁儿</DropdownItem>
-                                <DropdownItem>冰糖葫芦</DropdownItem>
-                                <DropdownItem>北京烤鸭</DropdownItem>
+                                <DropdownItem name="personCenter">个人中心</DropdownItem>
+                                <DropdownItem name="logout">安全退出</DropdownItem>
                             </DropdownMenu>
                         </Dropdown>
                     </li>
@@ -69,6 +61,7 @@
 </template>
 <script>
 import { routerArray, menuGroup } from "../router";
+import { getStore } from "../config/mUtils";
 export default {
   filters: {
     menuFilterName(name) {
@@ -88,7 +81,16 @@ export default {
   created() {
     this.routerArray = routerArray();
     this.isRoute = this.$route.path.split("/")[1];
-    console.log();
+    this.userCode = getStore("userCode");
+  },
+  methods: {
+    click(name) {
+      if (name === "personCenter") {
+        this.$router.push("/personCenter");
+      } else if (name === "logout") {
+        this.$router.push("/login");
+      }
+    }
   }
 };
 </script>

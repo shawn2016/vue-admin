@@ -1,12 +1,13 @@
 <template>
-    <div class="vue-layout-breadcrumb">
-        <Breadcrumb class="fl">
-            <BreadcrumbItem to="/">
-                <Icon :type="firstMenu | menuFilterIcon"></Icon> {{firstMenu | menuFilterName}}</BreadcrumbItem>
-            <BreadcrumbItem v-for="x in router" :key="x.name" v-if="secondMenu==x.name">{{x.meta.title}}</BreadcrumbItem>
-        </Breadcrumb>
-        <slot></slot>
-    </div>
+  <div class="vue-layout-breadcrumb">
+    <Breadcrumb class="fl">
+      <BreadcrumbItem>
+        <Icon :type="firstMenu | menuFilterIcon"></Icon> {{t1?t1:firstMenu | menuFilterName}}</BreadcrumbItem>
+      <BreadcrumbItem v-for="x in router" :key="x.name" v-if="secondMenu==x.name">{{t2?t2:x.meta.title}}</BreadcrumbItem>
+      <BreadcrumbItem v-if="t3">{{t3?t3:''}}</BreadcrumbItem>
+    </Breadcrumb>
+    <slot></slot>
+  </div>
 </template>
 
 <script>
@@ -19,6 +20,11 @@ export default {
     menuFilterIcon(name) {
       return menuGroup[name].icon;
     }
+  },
+  props: {
+    t1: String,
+    t2: String,
+    t3: String
   },
   data() {
     return {
