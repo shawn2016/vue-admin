@@ -141,7 +141,6 @@ export default {
       }
     };
   },
-  mounted() {},
   created() {
     if (this.$route.query && this.$route.query.userCode) {
       this.formValidate.userCode = this.$route.query.userCode;
@@ -223,7 +222,7 @@ export default {
       if (res && res.respCode === "000000") {
         this.$Message.success(res.respMsg);
         setTimeout(() => {
-          this.$router.push("/systemManage/userManage");
+          this.$router.push("/userManage/userList");
         }, 2000);
       } else {
         this.$Message.error(res.respMsg);

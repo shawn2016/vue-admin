@@ -72,3 +72,67 @@ export const updateUser = (obj) => fetch({
     method: "post",
     data: obj
 });
+/**
+ * 删除用户信息
+ */
+export const deleteUserList = (id) => fetch({
+    url: `/user/list/${id}`,
+    method: "delete",
+    data: {}
+});
+
+
+/**
+ * 获取用户信息列表
+ */
+export const getUserList = (obj) => fetch({
+    url: "/user/list",
+    method: "post",
+    data: obj
+});
+
+
+/**
+ * 添加文章
+ */
+export const saveArticle = (obj) => fetch({
+    url: "/article/create",
+    method: "post",
+    data: obj
+});
+
+/**
+ * 获取文章列表
+ */
+export const getArticleList = (obj) => fetch({
+    url: "/article/list",
+    method: "post",
+    data: obj
+});
+/**
+ * 删除文章信息
+ */
+export const deleteArticleList = (id) => fetch({
+    url: `/article/list/${id}`,
+    method: "delete",
+    data: {}
+});
+/**
+ * 获取文章信息
+ */
+export const searchArticleInfo = (obj) => fetch({
+    url: "/article/articleinfo",
+    method: "post",
+    data: {
+        id: obj.id
+    }
+});
+
+/**
+ * 更新文章信息
+ */
+export const updateArticle = (obj) => fetch({
+    url: "/article/update",
+    method: "post",
+    data: obj
+});

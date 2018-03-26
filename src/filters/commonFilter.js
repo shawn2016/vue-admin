@@ -18,3 +18,13 @@ export function status(str = "") {
             return ' '
     }
 }
+export function articleStatus(str = "") {
+    switch (str) {
+        case "100":
+            return '已发布'
+        case "500":
+            return '未发布'
+        default:
+            return ' '
+    }
+}

@@ -5,8 +5,12 @@ const articleSchema = mongoose.Schema({
     createTime: Date,
     updateTime: Date,
     author: String,
-    category: String,
-    desc: String
+    category: Array,
+    userCode:String,
+    content:String,
+    abstract: String,
+    tags: Array,
+    status:String
 }, { collection: 'article' })
 //这里mongoose.Schema要写上第二个参数，明确指定到数据库中的哪个表取数据
 

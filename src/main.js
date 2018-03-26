@@ -10,13 +10,13 @@ import Env from './config/env';
 import Util from './libs/util'
 import bus from './components/bus'
 import 'iview/dist/styles/iview.css'
-
+// import  'tinymce/skins/skin.min.css'
 import fetch from './libs/fetch'
 Vue.config.productionTip = false
 Vue.use(iView)
 Vue.use(VueRouter);
 // 将API方法绑定到全局
-Vue.prototype.$fetch = fetch;
+// Vue.prototype.$fetch = fetch;
 // 开启debug模式
 Vue.config.debug = true;
 // 路由配置

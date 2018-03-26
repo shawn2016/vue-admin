@@ -55,8 +55,12 @@
             </div>
             <div class="vue-layout-body">
                 <slot></slot>
+                <div class="vue-footer">
+                    Copyright © 2018-2018 shawn. 
+                </div>
             </div>
         </div>
+
     </div>
 </template>
 <script>

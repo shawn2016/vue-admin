@@ -6,12 +6,11 @@ const router = express.Router();
 // 加工数据
 const filterData = require('../../utils/filterData')
 //引入数据模型模块
-const Hero = require("../../models/user");
-
+const User = require("../../models/user");
 // 查询所有英雄信息路由
 // 上例将查询结果按时间倒序，因为 MongoDB 的 _id 生成算法中已经包含了当前的时间，所以这样写不仅没问题，也是推荐的按时间排序的写法。
 router.post("/list", (req, res) => {
-    if (req.body && req.body.createTime[0]) {
+    if (req.body && req.body.createTime && req.body.createTime[0]) {
         let createTime = {
             "$gte": req.body.createTime[0],
             "$lt": req.body.createTime[1]
@@ -20,20 +19,26 @@ router.post("/list", (req, res) => {
     } else {
         delete (req.body.createTime)
     }
-    console.log(req.body)
-    Hero.find(req.body)
-        .sort({ _id: -1 })
-        .limit(10)
-        .then(user => {
-            var obj = filterData({
-                values: user,
-                pagenation: {}
+    User.count({}, function (err, num) {
+        if (err) {
+            console.log(err)
+            return
+        }
+        console.log('over', err, num);
+        User.find(req.body)
+            .sort({ _id: -1 })
+            .limit(10)
+            .then(user => {
+                var obj = filterData({
+                    values: user,
+                    pagenation: {}
+                })
+                res.json(obj)
             })
-            res.json(obj)
-        })
-        .catch(err => {
-            res.json(err);
-        });
+            .catch(err => {
+                res.json(err);
+            });
+    });
 });
 
 // 分页
@@ -41,9 +46,9 @@ router.post("/list", (req, res) => {
 
 // // 通过ObjectId查询单个英雄信息路由
 // router.get("/list/:id", (req, res) => {
-//     Hero.findById(req.params.id)
-//         .then(hero => {
-//             res.json(hero);
+//     User.findById(req.params.id)
+//         .then(User => {
+//             res.json(User);
 //         })
 //         .catch(err => {
 //             res.json(err);
@@ -52,7 +57,7 @@ router.post("/list", (req, res) => {
 
 // //更新一条英雄信息数据路由
 router.post("/update", (req, res) => {
-    Hero.findOneAndUpdate(
+    User.findOneAndUpdate(
         { userCode: req.body.userCode },
         {
             $set: {
@@ -86,7 +91,7 @@ router.post("/update", (req, res) => {
 
 // // 添加图片路由
 // router.put("/addpic/:id", (req, res) => {
-//     Hero.findOneAndUpdate(
+//     User.findOneAndUpdate(
 //         { _id: req.params.id },
 //         {
 //             $push: {
@@ -97,16 +102,16 @@ router.post("/update", (req, res) => {
 //             new: true
 //         }
 //     )
-//         .then(hero => res.json(hero))
+//         .then(User => res.json(User))
 //         .catch(err => res.json(err));
 // });
 
 //删除一条用户信息
 router.delete("/list/:id", (req, res) => {
-    Hero.findOneAndRemove({
+    User.findOneAndRemove({
         _id: req.params.id
     })
-        .then(hero => {
+        .then(user => {
             let obj = filterData({
                 respMsg: "删除成功"
             })
@@ -116,7 +121,7 @@ router.delete("/list/:id", (req, res) => {
 });
 // 新增用户&注册用户
 router.post("/create", function (req, res) {
-    Hero.findOne({ "userCode": req.body.userCode }, function (err, doc) {
+    User.findOne({ "userCode": req.body.userCode }, function (err, doc) {
         if (doc) {
             let obj = filterData({
                 respCode: "900000",
@@ -125,7 +130,7 @@ router.post("/create", function (req, res) {
             res.json(obj)
             return false;
         }
-        Hero.create({
+        User.create({
             userCode: req.body.userCode,
             userName: req.body.userName,
             identifyNo: req.body.identifyNo,
@@ -164,7 +169,7 @@ router.post("/create", function (req, res) {
 })
 // 登录
 router.post("/login", function (req, res) {
-    Hero.find({
+    User.find({
         "userCode": req.body.userCode,
         "password": req.body.password
     },
@@ -204,7 +209,7 @@ router.post("/login", function (req, res) {
 })
 // 获取当前用户信息
 router.post("/userinfo", function (req, res) {
-    Hero.find({
+    User.find({
         "userCode": req.body.userCode
     },
         function (err, doc) {

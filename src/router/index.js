@@ -20,25 +20,63 @@ const routers = {
       }
     }
   ],
-  systemManage: [{
-    path: '/systemManage/userManage',
-    name: 'userManage',
-    component: () => import('@/pages/systemManage/userManage'),
+  articleManage: [{
+    path: '/articleManage/articleList',
+    name: 'articleList',
+    component: () => import('@/pages/articleManage/articleList'),
     meta: {
-      title: '用户管理'
+      title: '所有文章'
     }
   }, {
-    path: '/systemManage/addUser',
+    path: '/articleManage/editArticle',
+    name: 'editArticle',
+    component: () => import('@/pages/articleManage/editArticle'),
+    meta: {
+      title: '写文章'
+    }
+  }, {
+    path: '/articleManage/articleDesc',
+    name: 'articleDesc',
+    show: 'false',
+    component: () => import('@/pages/articleManage/articleDesc'),
+    meta: {
+      title: '文章详情'
+    }
+  }, {
+    path: '/articleManage/articleCategory',
+    name: 'articleCategory',
+    component: () => import('@/pages/articleManage/articleCategory'),
+    meta: {
+      title: '文章分类'
+    }
+  }],
+  roleManage: [{
+    path: '/roleManage/roleList',
+    name: 'roleList',
+    component: () => import('@/pages/roleManage/roleList'),
+    meta: {
+      title: '所有角色'
+    }
+  }],
+  userManage: [{
+    path: '/userManage/userList',
+    name: 'userList',
+    component: () => import('@/pages/userManage/userList'),
+    meta: {
+      title: '所有用户'
+    }
+  }, {
+    path: '/userManage/addUser',
     name: 'addUser',
-    component: () => import('@/pages/systemManage/addUser'),
+    component: () => import('@/pages/userManage/addUser'),
     meta: {
       title: '新增用户'
     }
   }, {
-    path: '/systemManage/userManage/userDesc',
+    path: '/userManage/userManage/userDesc',
     name: 'userDesc',
-    component: () => import('@/pages/systemManage/userDesc'),
-    show:'false',
+    component: () => import('@/pages/userManage/userDesc'),
+    show: 'false',
     meta: {
       title: '用户详情'
     }
@@ -50,9 +88,17 @@ export let menuGroup = {
     name: "首页",
     icon: "home"
   },
-  systemManage: {
-    name: "系统管理",
-    icon: "gear-a"
+  userManage: {
+    name: "用户管理",
+    icon: "person-stalker"
+  },
+  roleManage: {
+    name: "角色管理",
+    icon: "ios-people"
+  },
+  articleManage: {
+    name: "文章管理",
+    icon: "ios-book"
   }
 };
 

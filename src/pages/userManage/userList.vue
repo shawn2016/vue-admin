@@ -74,6 +74,7 @@ import iLayout from "../../components/layout.vue";
 import iBreadcrumb from "../../components/breadcrumb.vue";
 import navContent from "../../components/navcontent.vue";
 import filters from "../../filters";
+import { getUserList, deleteUserList } from "../../service/getData";
 export default {
   name: "userManage",
   components: {
@@ -109,7 +110,7 @@ export default {
         },
         {
           title: "创建日期",
-          width: 150,          
+          width: 150,
           key: "createTime",
           render: (h, params) => {
             const row = params.row;
@@ -228,11 +229,7 @@ export default {
     // 获取表格数据
     async getList() {
       this.tableLoading = true;
-      const res = await this.$fetch({
-        url: "/user/list",
-        method: "post",
-        data: this.formItem
-      });
+      const res = await getUserList(this.formItem);
       this.tableLoading = false;
       if (res && res.respCode === "000000") {
         if (res.values) {
@@ -245,11 +242,7 @@ export default {
     },
     // 删除用户
     async deleteUser(id) {
-      const res = await this.$fetch({
-        url: `/user/list/${id}`,
-        method: "delete",
-        data: {}
-      });
+      const res = await deleteUserList(id);
       this.modal6 = false;
       this.modalLoading = false;
       if (res && res.respCode === "000000") {
