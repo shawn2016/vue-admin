@@ -61,7 +61,7 @@
       <Table :loading="tableLoading" :data="tableData1" :columns="tableColumns1" stripe></Table>
       <div class="vue-panel-page">
         <div style="float: right;">
-          <Page :total="total" show-total show-elevator show-sizer  :page-size="pageSize" :current="pageNo" @on-page-size-change="changeSize" @on-change="changePage"></Page>
+          <Page :total="total" show-total show-elevator show-sizer :page-size="pageSize" :current="pageNo" @on-page-size-change="changeSize" @on-change="changePage"></Page>
         </div>
       </div>
     </div>
@@ -290,12 +290,16 @@ export default {
         }
       });
       this.tableLoading = false;
-      if (res && res.respCode === "000000") {
+      if (res && res.respCode === "000000" && res.values) {
         if (res.values) {
           this.tableData1 = res.values;
-           this.total = res.pagenation.itemCount;
+          this.total = res.pagenation.itemCount;
           this.pageNo = res.pagenation.pageNo;
         }
+      } else {
+        this.tableData1 = [];
+        this.total = 0;
+        this.pageNo = 1;
       }
     },
     clearForm() {

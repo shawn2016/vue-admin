@@ -2,6 +2,23 @@
 
 > A Vue.js project
 
+后期考虑：
+
+1. session
+2. cookie
+
+
+
+routes：路由分发
+
+controller：mvc中C层，做逻辑处理
+
+models：mvc中m层，数据表模型
+
+DBsql：模型sql操作
+
+DBhelper：公共sql方法
+
 主菜单：
 
 首页：

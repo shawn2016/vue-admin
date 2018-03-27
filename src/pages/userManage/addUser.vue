@@ -1,66 +1,66 @@
 <template>
-    <div>
-        <i-layout>
-            <i-breadcrumb :t2="breadcrumbTitle">
-                <Button class="fr vue-back-btn" @click="$router.go(-1)" shape="circle">返回</Button>
-            </i-breadcrumb>
-            <div class="vue-panel-desc">
-                <Row type="flex" justify="center">
-                    <Col span="12" :md="14" :lg="12" :xs="24" :sm="24">
-                    <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
-                        <FormItem label="用户名:" prop="userCode">
-                            <Input v-if="!$route.query.userCode" v-model="formValidate.userCode" placeholder="请输入用户名"></Input>
-                            <label v-if="$route.query.userCode">{{formValidate.userCode}}</label>
-                        </FormItem>
-                        <FormItem label="用户姓名:" prop="userName">
-                            <Input v-model="formValidate.userName" placeholder="请输入用户姓名"></Input>
-                        </FormItem>
-                        <FormItem label="手机号码:" prop="phonenum">
-                            <Input v-model="formValidate.phonenum" placeholder="请输入手机号码"></Input>
-                        </FormItem>
-                        <FormItem label="身份证号:" prop="identifyNo">
-                            <Input v-model="formValidate.identifyNo" placeholder="请输入身份证号"></Input>
-                        </FormItem>
-                        <FormItem label="用户类型:" prop="refUserRoleCode">
-                            <Select v-model="formValidate.refUserRoleCode" placeholder="请选择用户类型">
-                                <Option value="USER">普通用户</Option>
-                                <Option value="ADMIN">管理员</Option>
-                            </Select>
-                        </FormItem>
-                        <FormItem label="用户状态:" prop="status">
-                            <RadioGroup v-model="formValidate.status">
-                                <Radio label="100">启用</Radio>
-                                <Radio label="500">禁用</Radio>
-                            </RadioGroup>
-                        </FormItem>
-                        <FormItem label="职务:" prop="userDuty">
-                            <Select v-model="formValidate.userDuty" placeholder="请选择职务">
-                                <Option value="前端开发">前端开发</Option>
-                                <Option value="php开发">php开发</Option>
-                                <Option value="java开发">java开发</Option>
-                                <Option value="python开发">python开发</Option>
+  <div>
+    <i-layout>
+      <i-breadcrumb :t2="breadcrumbTitle">
+        <Button class="fr vue-back-btn" @click="$router.go(-1)" shape="circle">返回</Button>
+      </i-breadcrumb>
+      <div class="vue-panel-desc">
+        <Row type="flex" justify="center">
+          <Col span="12" :md="14" :lg="12" :xs="24" :sm="24">
+          <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
+            <FormItem label="用户名:" prop="userCode">
+              <Input v-if="!$route.query.userCode" v-model="formValidate.userCode" placeholder="请输入用户名"></Input>
+              <label v-if="$route.query.userCode">{{formValidate.userCode}}</label>
+            </FormItem>
+            <FormItem label="用户姓名:" prop="userName">
+              <Input v-model="formValidate.userName" placeholder="请输入用户姓名"></Input>
+            </FormItem>
+            <FormItem label="手机号码:" prop="phonenum">
+              <Input v-model="formValidate.phonenum" placeholder="请输入手机号码"></Input>
+            </FormItem>
+            <FormItem label="身份证号:" prop="identifyNo">
+              <Input v-model="formValidate.identifyNo" placeholder="请输入身份证号"></Input>
+            </FormItem>
+            <FormItem label="用户类型:" prop="refUserRoleCode">
+              <Select v-model="formValidate.refUserRoleCode" placeholder="请选择用户类型">
+                <Option value="USER">普通用户</Option>
+                <Option value="ADMIN">管理员</Option>
+              </Select>
+            </FormItem>
+            <FormItem label="用户状态:" prop="status">
+              <RadioGroup v-model="formValidate.status">
+                <Radio label="100">启用</Radio>
+                <Radio label="500">禁用</Radio>
+              </RadioGroup>
+            </FormItem>
+            <FormItem label="职务:" prop="userDuty">
+              <Select v-model="formValidate.userDuty" placeholder="请选择职务">
+                <Option value="前端开发">前端开发</Option>
+                <Option value="php开发">php开发</Option>
+                <Option value="java开发">java开发</Option>
+                <Option value="python开发">python开发</Option>
 
-                            </Select>
-                        </FormItem>
-                        <FormItem label="备注:" prop="desc">
-                            <Input v-model="formValidate.desc" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入备注"></Input>
-                        </FormItem>
-                        <FormItem>
-                            <Button type="primary" @click="handleSubmit('formValidate')">保存</Button>
-                            <Button type="ghost" @click="handleReset('formValidate')" style="margin-left: 8px">清空</Button>
-                        </FormItem>
-                    </Form>
-                    </Col>
-                </Row>
-            </div>
-        </i-layout>
-    </div>
+              </Select>
+            </FormItem>
+            <FormItem label="备注:" prop="desc">
+              <Input v-model="formValidate.desc" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入备注"></Input>
+            </FormItem>
+            <FormItem>
+              <Button type="primary" @click="handleSubmit('formValidate')">保存</Button>
+              <Button type="ghost" @click="handleReset('formValidate')" style="margin-left: 8px">清空</Button>
+            </FormItem>
+          </Form>
+          </Col>
+        </Row>
+      </div>
+    </i-layout>
+  </div>
 </template>
 
 <script>
 import iLayout from "../../components/layout.vue";
 import iBreadcrumb from "../../components/breadcrumb.vue";
-import { searchUserInfo, updateUser, createUser } from "../../service/getData";
+import { getUserList, updateUser, createUser } from "../../service/getData";
 import md5 from "js-md5";
 export default {
   name: "addUser",
@@ -145,20 +145,22 @@ export default {
     if (this.$route.query && this.$route.query.userCode) {
       this.formValidate.userCode = this.$route.query.userCode;
       this.findUserInfo();
-      this.breadcrumbTitle="修改用户"      
+      this.breadcrumbTitle = "修改用户";
     } else {
       // 新增用户时提示一下
-      this.breadcrumbTitle="新增用户"
+      this.breadcrumbTitle = "新增用户";
       this.message();
     }
   },
   methods: {
     async findUserInfo() {
-      const res = await searchUserInfo({
-        userCode: this.formValidate.userCode
+      const res = await getUserList({
+        params: {
+          userCode: this.formValidate.userCode
+        }
       });
       if (res.respCode === "000000") {
-        this.formValidate = res.body;
+        this.formValidate = res.values[0];
       }
     },
     message() {

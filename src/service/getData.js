@@ -13,14 +13,16 @@ export const accountLogin = (type, obj) => {
             url = '/user/update'
             break;
         default:
-            url = '/user/login'
+            url = '/user/list'
             break;
     }
     return fetch(
         {
             url,
             method: "post",
-            data: obj
+            data: {
+                params: obj
+            }
         })
 }
 
@@ -47,16 +49,6 @@ export const getUser = () => fetch({
 });
 
 /**
- * 查询点击的用户信息
- */
-export const searchUserInfo = (obj) => fetch({
-    url: "/user/userinfo",
-    method: "post",
-    data: {
-        userCode: obj.userCode
-    }
-});
-/**
  * 创建用户
  */
 export const createUser = (obj) => fetch({
@@ -76,9 +68,11 @@ export const updateUser = (obj) => fetch({
  * 删除用户信息
  */
 export const deleteUserList = (id) => fetch({
-    url: `/user/list/${id}`,
-    method: "delete",
-    data: {}
+    url: `/user/remove`,
+    method: "post",
+    data: {
+        _id: id
+    }
 });
 
 
@@ -113,18 +107,10 @@ export const getArticleList = (obj) => fetch({
  * 删除文章信息
  */
 export const deleteArticleList = (id) => fetch({
-    url: `/article/list/${id}`,
-    method: "delete",
-    data: {}
-});
-/**
- * 获取文章信息
- */
-export const searchArticleInfo = (obj) => fetch({
-    url: "/article/articleinfo",
+    url: `/article/remove`,
     method: "post",
     data: {
-        id: obj.id
+        _id: id
     }
 });
 

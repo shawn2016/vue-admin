@@ -56,7 +56,7 @@
         </router-link>
       </nav-content>
       <Table :loading="tableLoading" :data="tableData1" :columns="tableColumns1" stripe></Table>
-      <div class="vue-panel-page">
+      <div class="vue-panel-page" v-if="tableData1.length>10">
         <div style="float: right;">
           <Page :total="total" show-total show-elevator show-sizer :page-size="pageSize" :current="pageNo" @on-page-size-change="changeSize" @on-change="changePage"></Page>
         </div>
@@ -70,6 +70,7 @@
   </i-layout>
 </template>
 <script>
+import Vue from "vue";
 import iLayout from "../../components/layout.vue";
 import iBreadcrumb from "../../components/breadcrumb.vue";
 import navContent from "../../components/navcontent.vue";
@@ -102,7 +103,9 @@ export default {
       modalContent: "",
       modalTitle: "",
       modalType: "",
-      formItem: {},
+      formItem: {
+        createTime:[]
+      },
       tableData1: [],
       tableColumns1: [
         {
@@ -135,7 +138,7 @@ export default {
         },
         {
           title: "手机号码",
-          key: "phonenum",
+          key: "phonenum"
         },
         {
           title: "身份证号码",
@@ -256,6 +259,10 @@ export default {
           this.tableData1 = res.values;
           this.total = res.pagenation.itemCount;
           this.pageNo = res.pagenation.pageNo;
+        } else {
+          this.tableData1 = [];
+          this.total = 0;
+          this.pageNo = 1;
         }
       }
     },
@@ -292,7 +299,7 @@ export default {
     goDesc(userCode) {
       this.$router.push({
         name: "userDesc",
-        path: "/systemManage/systemManage/userDesc",
+        path: "/userManage/userList/userDesc",
         query: { userCode }
       });
     },

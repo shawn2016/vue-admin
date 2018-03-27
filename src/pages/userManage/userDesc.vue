@@ -1,7 +1,7 @@
 <template>
   <div>
     <i-layout>
-      <i-breadcrumb t2="用户管理" t3="用户详情">
+      <i-breadcrumb t2="所有用户" t3="用户详情">
         <Button class="fr vue-back-btn" @click="$router.go(-1)" shape="circle">返回</Button>
       </i-breadcrumb>
       <div class="vue-panel">
@@ -50,7 +50,7 @@
 <script>
 import iLayout from "../../components/layout.vue";
 import iBreadcrumb from "../../components/breadcrumb.vue";
-import { searchUserInfo } from "../../service/getData";
+import { getUserList } from "../../service/getData";
 import filters from "../../filters";
 export default {
   name: "userDesc",
@@ -81,11 +81,13 @@ export default {
   },
   methods: {
     async findUserInfo(userCode) {
-      const res = await searchUserInfo({
-        userCode
+      const res = await getUserList({
+        params: {
+          userCode
+        }
       });
-      if (res.respCode === "000000") {
-        this.formValidate = res.body;
+      if (res.respCode === "000000" && res.values) {
+        this.formValidate = res.values[0];
       }
     }
   }

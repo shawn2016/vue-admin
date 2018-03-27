@@ -55,7 +55,7 @@ import editor from "../../components/editor.vue";
 import iBreadcrumb from "../../components/breadcrumb.vue";
 import {
   saveArticle,
-  searchArticleInfo,
+  getArticleList,
   updateArticle
 } from "../../service/getData";
 export default {
@@ -175,17 +175,20 @@ export default {
       formItem: {
         category: [],
         tags: [],
-        content: ""
+        content: "",
+        articleTitle: ""
       }
     };
   },
   methods: {
     async findArticleInfo(id) {
-      const res = await searchArticleInfo({
-        id
+      const res = await getArticleList({
+        params: {
+          _id:id
+        }
       });
-      if (res.respCode === "000000") {
-        this.formItem = res.body;
+      if (res.respCode === "000000" && res.values) {
+        this.formItem = res.values[0];
       }
     },
     handleSubmit(name) {

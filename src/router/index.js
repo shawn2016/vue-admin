@@ -42,13 +42,6 @@ const routers = {
     meta: {
       title: '文章详情'
     }
-  }, {
-    path: '/articleManage/articleCategory',
-    name: 'articleCategory',
-    component: () => import('@/pages/articleManage/articleCategory'),
-    meta: {
-      title: '文章分类'
-    }
   }],
   roleManage: [{
     path: '/roleManage/roleList',
@@ -73,7 +66,7 @@ const routers = {
       title: '新增用户'
     }
   }, {
-    path: '/userManage/userManage/userDesc',
+    path: '/userManage/userList/userDesc',
     name: 'userDesc',
     component: () => import('@/pages/userManage/userDesc'),
     show: 'false',
@@ -99,6 +92,18 @@ export let menuGroup = {
   articleManage: {
     name: "文章管理",
     icon: "ios-book"
+  },
+  tagsManage: {
+    name: "标签管理",
+    icon: "ios-pricetags"
+  },
+  commentManage: {
+    name: "评论管理",
+    icon: "chatbox-working"
+  },
+  menuManage: {
+    name: "菜单管理",
+    icon: "chatbox-working"
   }
 };
 

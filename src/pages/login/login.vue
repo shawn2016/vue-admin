@@ -69,15 +69,15 @@ export default {
         password: md5(this.formInline.password)
       });
       this.loading = false;
-      if (res && res.respCode === "000000") {
+      if (res && res.respCode === "000000" && res.values) {
         this.$Message.success(res.respMsg);
         this.RECORD_USERINFO({
-          userCode: res.body.userCode
+          userCode: res.values[0].userCode
         });
         if (this.type === "login") {
           this.$router.push("/home");
         } else {
-          this.type = "login"
+          this.type = "login";
           setTimeout(() => {
             this.handleSubmit("formInline");
           }, 2000);
