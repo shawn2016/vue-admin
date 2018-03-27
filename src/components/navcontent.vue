@@ -18,5 +18,7 @@ export default {
     border: 1px solid #e9eaec;
     border-bottom: none;
     line-height: 50px;
+  
 }
+
 </style>

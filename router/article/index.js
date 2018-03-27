@@ -8,58 +8,53 @@ const filterData = require('../../utils/filterData')
 //引入数据模型模块
 const Article = require("../../models/article");
 
-// 查询所有英雄信息路由
-// 上例将查询结果按时间倒序，因为 MongoDB 的 _id 生成算法中已经包含了当前的时间，所以这样写不仅没问题，也是推荐的按时间排序的写法。
+// 文章列表
 router.post("/list", (req, res) => {
-    if (req.body && req.body.createTime && req.body.createTime[0]) {
+    if (req.body && req.body.params && req.body.params.createTime && req.body.params.createTime[0]) {
         let createTime = {
-            "$gte": req.body.createTime[0],
-            "$lt": req.body.createTime[1]
+            "$gte": req.body.params.createTime[0],
+            "$lt": req.body.params.createTime[1]
         }
-        req.body.createTime = createTime
+        req.body.params.createTime = createTime
     } else {
-        delete (req.body.createTime)
+        delete (req.body.params.createTime)
     }
-    if (req.body && req.body.articleTitle) {
+    if (req.body && req.body.params && req.body.params.articleTitle) {
         let articleTitle = {
-            "$mod": req.body.articleTitle
+            "$mod": req.body.params.articleTitle
         }
-        req.body.articleTitle = articleTitle
+        req.body.params.articleTitle = articleTitle
     } else {
-        delete (req.body.articleTitle)
+        delete (req.body.params.articleTitle)
     }
-    Article.find(req.body)
-        .sort({ _id: -1 })
-        .limit(10)
-        .then(user => {
-            var obj = filterData({
-                values: user,
-                pagenation: {}
+    Article.count(req.body.params, function (err, total) {
+        if (err) {
+            console.log(err)
+            return
+        }
+        Article.find(req.body.params)
+            .sort({ _id: -1 })
+            .limit(req.body.pagenation.pageSize)
+            .skip((req.body.pagenation.pageNo - 1) * req.body.pagenation.pageSize)
+            .then(article => {
+                var obj = filterData({
+                    values: article,
+                    pagenation: {
+                        itemCount: total,
+                        pageNo: req.body.pagenation.pageNo,
+                        pageSize: req.body.pagenation.pageSize
+                    }
+                })
+                res.json(obj)
             })
-            res.json(obj)
-        })
-        .catch(err => {
-            res.json(err);
-        });
+            .catch(err => {
+                res.json(err);
+            });
+    });
 });
-
-// 分页
-
-
-// // 通过ObjectId查询单个英雄信息路由
-// router.get("/list/:id", (req, res) => {
-//     Article.findById(req.params.id)
-//         .then(Article => {
-//             res.json(Article);
-//         })
-//         .catch(err => {
-//             res.json(err);
-//         });
-// });
-
-// //更新一条英雄信息数据路由
+// //更新文章
 router.post("/update", (req, res) => {
-    console.log(req.body)
+    console.log(req.body.id)
     Article.findOneAndUpdate(
         { _id: req.body.id },
         {
@@ -88,24 +83,7 @@ router.post("/update", (req, res) => {
         .catch(err => res.json(err));
 });
 
-// // 添加图片路由
-// router.put("/addpic/:id", (req, res) => {
-//     Article.findOneAndUpdate(
-//         { _id: req.params.id },
-//         {
-//             $push: {
-//                 imgArr: req.body.url
-//             }
-//         },
-//         {
-//             new: true
-//         }
-//     )
-//         .then(Article => res.json(Article))
-//         .catch(err => res.json(err));
-// });
-
-//删除一条用户信息
+//删除一篇文章
 router.delete("/list/:id", (req, res) => {
     Article.findOneAndRemove({
         _id: req.params.id
@@ -145,45 +123,8 @@ router.post("/create", function (req, res) {
         }
     })
 })
-// 登录
-router.post("/login", function (req, res) {
-    Article.find({
-        "userCode": req.body.userCode,
-        "password": req.body.password
-    },
-        function (err, doc) {
-            if (err) {
 
-                let obj = filterData({
-                    respMsg: "用户名或密码错误",
-                    respCode: "900000"
-                })
-                res.json(obj)
-                return false;
-            }
-            if (doc.length == 0) {
-                let obj = filterData({
-                    respMsg: "用户名或密码错误",
-                    respCode: "900000"
-                })
-                res.json(obj)
-                return false;
-            } else {
-                let obj = filterData({
-                    respMsg: "登录成功",
-                    body: {
-                        userName: doc[0].userName,
-                        userCode: doc[0].userCode,
-                        refUserRoleCode: doc[0].refUserRoleCode
-                    }
-                })
-                res.json(obj)
-            }
-
-        })
-
-})
-// 获取当前用户信息
+// 获取当前文章的信息
 router.post("/articleinfo", function (req, res) {
     Article.find({
         _id: req.body.id

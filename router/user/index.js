@@ -7,31 +7,34 @@ const router = express.Router();
 const filterData = require('../../utils/filterData')
 //引入数据模型模块
 const User = require("../../models/user");
-// 查询所有英雄信息路由
-// 上例将查询结果按时间倒序，因为 MongoDB 的 _id 生成算法中已经包含了当前的时间，所以这样写不仅没问题，也是推荐的按时间排序的写法。
+// 用户列表
 router.post("/list", (req, res) => {
-    if (req.body && req.body.createTime && req.body.createTime[0]) {
+    if (req.body && req.body.params && req.body.params.createTime && req.body.params.createTime[0]) {
         let createTime = {
-            "$gte": req.body.createTime[0],
-            "$lt": req.body.createTime[1]
+            "$gte": req.body.params.createTime[0],
+            "$lt": req.body.params.createTime[1]
         }
-        req.body.createTime = createTime
+        req.body.params.createTime = createTime
     } else {
-        delete (req.body.createTime)
+        delete (req.body.params.createTime)
     }
-    User.count({}, function (err, num) {
+    User.count(req.body.params, function (err, total) {
         if (err) {
             console.log(err)
             return
         }
-        console.log('over', err, num);
-        User.find(req.body)
+        User.find(req.body.params)
             .sort({ _id: -1 })
-            .limit(10)
+            .limit(req.body.pagenation.pageSize)
+            .skip((req.body.pagenation.pageNo - 1) * req.body.pagenation.pageSize)
             .then(user => {
                 var obj = filterData({
                     values: user,
-                    pagenation: {}
+                    pagenation: {
+                        itemCount: total,
+                        pageNo: req.body.pagenation.pageNo,
+                        pageSize: req.body.pagenation.pageSize
+                    }
                 })
                 res.json(obj)
             })
@@ -40,22 +43,7 @@ router.post("/list", (req, res) => {
             });
     });
 });
-
-// 分页
-
-
-// // 通过ObjectId查询单个英雄信息路由
-// router.get("/list/:id", (req, res) => {
-//     User.findById(req.params.id)
-//         .then(User => {
-//             res.json(User);
-//         })
-//         .catch(err => {
-//             res.json(err);
-//         });
-// });
-
-// //更新一条英雄信息数据路由
+// 修改用户信息
 router.post("/update", (req, res) => {
     User.findOneAndUpdate(
         { userCode: req.body.userCode },
@@ -88,24 +76,6 @@ router.post("/update", (req, res) => {
         })
         .catch(err => res.json(err));
 });
-
-// // 添加图片路由
-// router.put("/addpic/:id", (req, res) => {
-//     User.findOneAndUpdate(
-//         { _id: req.params.id },
-//         {
-//             $push: {
-//                 imgArr: req.body.url
-//             }
-//         },
-//         {
-//             new: true
-//         }
-//     )
-//         .then(User => res.json(User))
-//         .catch(err => res.json(err));
-// });
-
 //删除一条用户信息
 router.delete("/list/:id", (req, res) => {
     User.findOneAndRemove({

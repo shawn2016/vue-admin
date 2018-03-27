@@ -61,7 +61,7 @@
       <Table :loading="tableLoading" :data="tableData1" :columns="tableColumns1" stripe></Table>
       <div class="vue-panel-page">
         <div style="float: right;">
-          <Page :total="100" :current="1" @on-change="changePage"></Page>
+          <Page :total="total" show-total show-elevator show-sizer  :page-size="pageSize" :current="pageNo" @on-page-size-change="changeSize" @on-change="changePage"></Page>
         </div>
       </div>
     </div>
@@ -93,6 +93,9 @@ export default {
   },
   data() {
     return {
+      pageSize: 10,
+      total: 0,
+      pageNo: 1,
       value2: "",
       value14: "",
       tableLoading: false,
@@ -267,14 +270,31 @@ export default {
     };
   },
   methods: {
+    changePage(pageNo) {
+      console.log(pageNo);
+      this.pageNo = pageNo;
+      this.getList();
+    },
+    changeSize(pageSize) {
+      this.pageSize = pageSize;
+      this.getList();
+    },
     // 获取表格数据
     async getList() {
       this.tableLoading = true;
-      const res = await getArticleList(this.formItem);
+      const res = await getArticleList({
+        params: this.formItem,
+        pagenation: {
+          pageNo: this.pageNo,
+          pageSize: this.pageSize
+        }
+      });
       this.tableLoading = false;
       if (res && res.respCode === "000000") {
         if (res.values) {
           this.tableData1 = res.values;
+           this.total = res.pagenation.itemCount;
+          this.pageNo = res.pagenation.pageNo;
         }
       }
     },
@@ -293,8 +313,6 @@ export default {
         this.$Message.error(res.respMsg);
       }
     },
-    // 分页
-    changePage() {},
     // 打开对话框
     openModal(obj) {
       this.modal6 = true;
