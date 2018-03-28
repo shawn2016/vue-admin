@@ -122,3 +122,41 @@ export const updateArticle = (obj) => fetch({
     method: "post",
     data: obj
 });
+
+
+/**
+ * 创建菜单
+ */
+export const createMenu = (obj) => fetch({
+    url: "/menu/create",
+    method: "post",
+    data: obj
+});
+/**
+ * 更新菜单信息
+ */
+export const updateMenu = (obj) => fetch({
+    url: "/menu/update",
+    method: "post",
+    data: obj
+});
+/**
+ * 删除菜单信息
+ */
+export const deleteMenuList = (id) => fetch({
+    url: `/menu/remove`,
+    method: "post",
+    data: {
+        _id: id
+    }
+});
+
+
+/**
+ * 获取菜单信息列表
+ */
+export const getMenuList = (obj) => fetch({
+    url: "/menu/list",
+    method: "post",
+    data: obj
+});

@@ -25,14 +25,14 @@ const routers = {
     name: 'articleList',
     component: () => import('@/pages/articleManage/articleList'),
     meta: {
-      title: '所有文章'
+      title: '文章列表'
     }
   }, {
     path: '/articleManage/editArticle',
     name: 'editArticle',
     component: () => import('@/pages/articleManage/editArticle'),
     meta: {
-      title: '写文章'
+      title: '新增文章'
     }
   }, {
     path: '/articleManage/articleDesc',
@@ -43,12 +43,65 @@ const routers = {
       title: '文章详情'
     }
   }],
+  menuManage: [{
+    path: '/menuManage/menuList',
+    name: 'menuList',
+    component: () => import('@/pages/menuManage/menuList'),
+    meta: {
+      title: '菜单列表'
+    }
+  }, {
+    path: '/menuManage/addMenu',
+    name: 'addMenu',
+    component: () => import('@/pages/menuManage/addMenu'),
+    meta: {
+      title: '新增菜单'
+    }
+  }, {
+    path: '/menuManage/menuList/menuDesc',
+    name: 'menuDesc',
+    component: () => import('@/pages/menuManage/menuDesc'),
+    show: 'false',
+    meta: {
+      title: '菜单详情'
+    }
+  }],
   roleManage: [{
     path: '/roleManage/roleList',
     name: 'roleList',
     component: () => import('@/pages/roleManage/roleList'),
     meta: {
-      title: '所有角色'
+      title: '角色列表'
+    }
+  }, {
+    path: '/roleManage/addRole',
+    name: 'addRole',
+    component: () => import('@/pages/roleManage/addRole'),
+    meta: {
+      title: '新增角色'
+    }
+  }, {
+    path: '/roleManage/roleList/roleDesc',
+    name: 'roleDesc',
+    component: () => import('@/pages/roleManage/roleDesc'),
+    show: 'false',
+    meta: {
+      title: '角色详情'
+    }
+  }],
+  pageManage: [{
+    path: '/pageManage/pageList',
+    name: 'pageList',
+    component: () => import('@/pages/pageManage/pageList'),
+    meta: {
+      title: '页面列表'
+    }
+  }, {
+    path: '/pageManage/addPage',
+    name: 'addPage',
+    component: () => import('@/pages/pageManage/addPage'),
+    meta: {
+      title: '新增页面'
     }
   }],
   userManage: [{
@@ -56,7 +109,7 @@ const routers = {
     name: 'userList',
     component: () => import('@/pages/userManage/userList'),
     meta: {
-      title: '所有用户'
+      title: '用户列表'
     }
   }, {
     path: '/userManage/addUser',
@@ -103,7 +156,11 @@ export let menuGroup = {
   },
   menuManage: {
     name: "菜单管理",
-    icon: "chatbox-working"
+    icon: "document-text"
+  },
+  pageManage: {
+    name: "页面管理",
+    icon: "ios-browsers"
   }
 };
 

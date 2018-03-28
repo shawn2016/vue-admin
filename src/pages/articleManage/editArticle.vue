@@ -16,9 +16,7 @@
           </FormItem>
           <FormItem label="文章作者:" prop="author">
             <Select placeholder="请选择文章作者" clearable v-model="formItem.author">
-              <Option value="react">react</Option>
-              <Option value="vue">vue</Option>
-              <Option value="node">node</Option>
+              <Option :key="x.userCode" v-for="x in userList" :value="x.userCode">{{x.userName}}</Option>
             </Select>
           </FormItem>
           <FormItem label="文章内容:" prop="content">
@@ -56,7 +54,8 @@ import iBreadcrumb from "../../components/breadcrumb.vue";
 import {
   saveArticle,
   getArticleList,
-  updateArticle
+  updateArticle,
+  getUserList
 } from "../../service/getData";
 export default {
   name: "addUser",
@@ -91,6 +90,7 @@ export default {
     };
 
     return {
+      userList: [],
       ruleValidate: {
         articleTitle: [
           {
@@ -180,15 +180,32 @@ export default {
       }
     };
   },
+  created() {
+    this.getUserList();
+  },
   methods: {
     async findArticleInfo(id) {
       const res = await getArticleList({
         params: {
-          _id:id
+          _id: id
         }
       });
       if (res.respCode === "000000" && res.values) {
         this.formItem = res.values[0];
+      }
+    },
+    // 获取表格数据
+    async getUserList() {
+      const res = await getUserList({
+        params: {}
+      });
+      if (res && res.respCode === "000000") {
+        if (res.values) {
+          this.userList = res.values;
+          console.log(res.values);
+        } else {
+          this.userList = [];
+        }
       }
     },
     handleSubmit(name) {

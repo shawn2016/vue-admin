@@ -1,73 +1,76 @@
 <template>
-  <i-layout>
-    <i-breadcrumb>
-    </i-breadcrumb>
+    <i-layout>
+        <i-breadcrumb>
+        </i-breadcrumb>
 
-    <div class="vue-panel">
-      <Form :model="formItem" :label-width="80">
-        <Row>
-          <Col :xs="24" :sm="24" :md="8" :lg="8">
-          <FormItem label="创建日期:">
-            <DatePicker style="width:100%" v-model="formItem.createTime" format="yyyy-MM-dd" type="daterange" placement="bottom-start" placeholder="请选择日期"></DatePicker>
-          </FormItem>
-          </Col>
-          <Col :xs="24" :sm="24" :md="8" :lg="8">
-          <FormItem label="用户姓名:">
-            <Input v-model="formItem.userName" placeholder="请输入用户姓名" clearable></Input>
-          </FormItem>
-          </Col>
-          <Col :xs="24" :sm="24" :md="8" :lg="8">
-          <FormItem label="身份证号:">
-            <Input v-model="formItem.identifyNo" placeholder="请输入身份证号" clearable></Input>
-          </FormItem>
-          </Col>
-          <Col :xs="24" :sm="24" :md="8" :lg="8">
-          <FormItem label="用户类型:">
-            <Select v-model="formItem.refUserRoleCode">
-              <Option value="USER">普通用户</Option>
-              <Option value="ADMIN">管理员</Option>
-            </Select>
-          </FormItem>
-          </Col>
-          <Col :xs="24" :sm="24" :md="8" :lg="8">
-          <FormItem label="用户状态:">
-            <Select v-model="formItem.status">
-              <Option value="500">禁用</Option>
-              <Option value="100">启用</Option>
-            </Select>
-          </FormItem>
-          </Col>
-          <Col :xs="24" :sm="24" :md="8" :lg="8">
-          <FormItem label="用户名:">
-            <Input v-model="formItem.userCode" placeholder="请输入用户名" clearable></Input>
-          </FormItem>
-          </Col>
-        </Row>
-        <FormItem>
-          <Button type="primary" @click="getList" style="width:80px" long shape="circle">查询</Button>
-          <Button type="ghost" style="width:80px;margin-left: 8px" @click="clearForm" shape="circle">清除</Button>
-        </FormItem>
-      </Form>
-    </div>
-    <div class="vue-panel-table">
-      <nav-content>
-        <router-link to="/userManage/addUser">
-          <Button class="fr vue-back-btn" shape="circle">新增用户</Button>
-        </router-link>
-      </nav-content>
-      <Table :loading="tableLoading" :data="tableData1" :columns="tableColumns1" stripe></Table>
-      <div class="vue-panel-page" v-if="tableData1.length>10">
-        <div style="float: right;">
-          <Page :total="total" show-total show-elevator show-sizer :page-size="pageSize" :current="pageNo" @on-page-size-change="changeSize" @on-change="changePage"></Page>
+        <div class="vue-panel">
+            <Form :model="formItem" :label-width="80">
+                <Row>
+                    <Col :xs="24" :sm="24" :md="8" :lg="8">
+                    <FormItem label="创建日期:">
+                        <DatePicker style="width:100%" v-model="formItem.createTime" format="yyyy-MM-dd" type="daterange" placement="bottom-start" placeholder="请选择日期"></DatePicker>
+                    </FormItem>
+                    </Col>
+                    <Col :xs="24" :sm="24" :md="8" :lg="8">
+                    <FormItem label="菜单名称:">
+                        <Input v-model="formItem.menuName" placeholder="请输入菜单名称" clearable></Input>
+                    </FormItem>
+                    </Col>
+                    <Col :xs="24" :sm="24" :md="8" :lg="8">
+                    <FormItem label="菜单编码:">
+                        <Input v-model="formItem.menuId" placeholder="请输入菜单编码" clearable></Input>
+                    </FormItem>
+                    </Col>
+                    <Col :xs="24" :sm="24" :md="8" :lg="8">
+                    <FormItem label="所属平台:">
+                        <Select v-model="formItem.platType">
+                            <Option value="100">前台</Option>
+                            <Option value="200">后台</Option>
+                        </Select>
+                    </FormItem>
+                    </Col>
+                    <Col :xs="24" :sm="24" :md="8" :lg="8">
+                    <FormItem label="菜单级别:">
+                        <Select v-model="formItem.menuLevel">
+                            <Option value="100">一级</Option>
+                            <Option value="200">二级</Option>
+                        </Select>
+                    </FormItem>
+                    </Col>
+                    <Col :xs="24" :sm="24" :md="8" :lg="8">
+                    <FormItem label="创建人:">
+                        <Select v-model="formItem.userCode">
+                            <Option value="100">一级</Option>
+                            <Option value="200">二级</Option>
+                        </Select>
+                    </FormItem>
+                    </Col>
+                </Row>
+                <FormItem>
+                    <Button type="primary" @click="getList" style="width:80px" long shape="circle">查询</Button>
+                    <Button type="ghost" style="width:80px;margin-left: 8px" @click="clearForm" shape="circle">清除</Button>
+                </FormItem>
+            </Form>
         </div>
-      </div>
-    </div>
-    <!-- 对话框 -->
+        <div class="vue-panel-table">
+            <nav-content>
+                <router-link to="/menuManage/addMenu">
+                    <Button class="fr vue-back-btn" shape="circle">新增菜单</Button>
+                </router-link>
+            </nav-content>
+            <Table :loading="tableLoading" :data="tableData1" :columns="tableColumns1" stripe></Table>
+            <div class="vue-panel-page" v-if="tableData1.length>10">
+                <div style="float: right;">
+                    <Page :total="total" show-total show-elevator show-sizer :page-size="pageSize" :current="pageNo" @on-page-size-change="changeSize" @on-change="changePage"></Page>
+                </div>
+            </div>
+        </div>
+        <!-- 对话框 -->
 
-    <Modal v-model="modal6" :title="modalTitle" :loading="modalLoading" @on-ok="asyncOK">
-      <p>{{modalContent}}</p>
-    </Modal>
-  </i-layout>
+        <Modal v-model="modal6" :title="modalTitle" :loading="modalLoading" @on-ok="asyncOK">
+            <p>{{modalContent}}</p>
+        </Modal>
+    </i-layout>
 </template>
 <script>
 import Vue from "vue";
@@ -75,9 +78,9 @@ import iLayout from "../../components/layout.vue";
 import iBreadcrumb from "../../components/breadcrumb.vue";
 import navContent from "../../components/navcontent.vue";
 import filters from "../../filters";
-import { getUserList, deleteUserList } from "../../service/getData";
+import { getMenuList, deleteMenuList } from "../../service/getData";
 export default {
-  name: "userManage",
+  name: "menuList",
   components: {
     iLayout,
     iBreadcrumb,
@@ -104,7 +107,7 @@ export default {
       modalTitle: "",
       modalType: "",
       formItem: {
-        createTime:[]
+        createTime: []
       },
       tableData1: [],
       tableColumns1: [
@@ -128,41 +131,38 @@ export default {
           }
         },
         {
-          title: "用户名",
-          key: "userCode",
+          title: "菜单编码",
+          key: "menuId",
           sortable: true
         },
         {
-          title: "用户姓名",
-          key: "userName"
+          title: "菜单名称",
+          key: "menuName"
         },
         {
-          title: "手机号码",
-          key: "phonenum"
+          title: "创建人",
+          key: "userCode"
         },
         {
-          title: "身份证号码",
-          width: 200,
-          key: "identifyNo"
-        },
-        {
-          title: "用户类型",
-          key: "refUserRoleCode",
+          title: "所属平台",
+          key: "platType",
           render: (h, params) => {
             const row = params.row;
-            const refUserRoleCode = row.refUserRoleCode
-              ? filters.refUserRoleCode(row.refUserRoleCode)
-              : row.refUserRoleCode;
-            return h("span", refUserRoleCode);
+            const platType = row.platType
+              ? filters.platType(row.platType)
+              : row.platType;
+            return h("span", platType);
           }
         },
         {
-          title: "用户状态",
-          key: "status",
+          title: "菜单级别",
+          key: "menuLevel",
           render: (h, params) => {
             const row = params.row;
-            const status = row.status ? filters.userStatus(row.status) : row.status;
-            return h("span", status);
+            const menuLevel = row.menuLevel
+              ? filters.menuLevel(row.menuLevel)
+              : row.menuLevel;
+            return h("span", menuLevel);
           }
         },
         {
@@ -183,7 +183,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.editUser(params.row.userCode);
+                      this.editMenu(params.row.menuId);
                     }
                   }
                 },
@@ -221,7 +221,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.goDesc(params.row.userCode);
+                      this.goDesc(params.row.menuId);
                     }
                   }
                 },
@@ -246,7 +246,7 @@ export default {
     // 获取表格数据
     async getList() {
       this.tableLoading = true;
-      const res = await getUserList({
+      const res = await getMenuList({
         params: this.formItem,
         pagenation: {
           pageNo: this.pageNo,
@@ -269,9 +269,9 @@ export default {
     clearForm() {
       this.formItem = {};
     },
-    // 删除用户
-    async deleteUser(id) {
-      const res = await deleteUserList(id);
+    // 删除菜单
+    async deleteMenu(id) {
+      const res = await deleteMenuList(id);
       this.modal6 = false;
       this.modalLoading = false;
       if (res && res.respCode === "000000") {
@@ -289,25 +289,25 @@ export default {
       this.modalType = obj.modalType;
       this.modalId = obj.id;
     },
-    editUser(userCode) {
+    editMenu(menuId) {
       this.$router.push({
-        name: "addUser",
-        path: "/userManage/addUser",
-        query: { userCode }
+        name: "addMenu",
+        path: "/menuManage/addMenu",
+        query: { menuId }
       });
     },
-    goDesc(userCode) {
+    goDesc(menuId) {
       this.$router.push({
-        name: "userDesc",
-        path: "/userManage/userList/userDesc",
-        query: { userCode }
+        name: "menuDesc",
+        path: "/menuManage/menuList/menuDesc",
+        query: { menuId }
       });
     },
     //对话框 is-ok
     asyncOK() {
       this.modalLoading = true;
       if (this.modalType === "delete") {
-        this.deleteUser(this.modalId);
+        this.deleteMenu(this.modalId);
       }
     }
   },

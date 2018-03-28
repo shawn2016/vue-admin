@@ -4,6 +4,7 @@ var router = express.Router();
 
 var userManagementController = require('../server/controller/userManagementController');
 var articleManagementController = require('../server/controller/articleManagementController');
+var menuManagementController = require('../server/controller/menuManagementController');
 
 // var schoolClassManagermentController = require('../server/controller/schoolClassManagermentController');
 // var user_schoolClassController = require('../server/controller/user_schoolClassController');
@@ -25,6 +26,15 @@ router.post('/article/list',articleManagementController.articleFindAction());
 router.post('/article/remove',articleManagementController.articleRemoveAction());
 router.post('/article/update',articleManagementController.articleUpdateAction());
 //router.get('/resetPass',articleManagementController.resetPass());
+
+/**
+ * 菜单管理
+ */
+router.post('/menu/create',menuManagementController.menuAddAction());
+router.post('/menu/list',menuManagementController.menuFindAction());
+router.post('/menu/remove',menuManagementController.menuRemoveAction());
+router.post('/menu/update',menuManagementController.menuUpdateAction());
+//router.get('/resetPass',menuManagementController.resetPass());
 
 
 /**

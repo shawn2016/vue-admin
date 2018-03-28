@@ -276,7 +276,7 @@ export default {
                       this.openModal({
                         modalType: "edit",
                         modalTitle: "提示",
-                        modalContent: "此操作将永久删除该文件, 是否继续?"
+                        modalContent: "此操作将永久删除该项, 是否继续?"
                       });
                     }
                   }
@@ -296,7 +296,7 @@ export default {
                         id: params.row._id,
                         modalType: "delete",
                         modalTitle: "提示",
-                        modalContent: "此操作将永久删除该文件, 是否继续?"
+                        modalContent: "此操作将永久删除该项, 是否继续?"
                       });
                     }
                   }

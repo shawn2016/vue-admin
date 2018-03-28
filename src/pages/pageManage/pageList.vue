@@ -10,7 +10,7 @@
 import iLayout from "../../components/layout.vue";
 
 export default {
-  name: "roleList",
+  name: "pageList",
   components: {
     iLayout
   },

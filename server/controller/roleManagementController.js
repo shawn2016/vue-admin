@@ -15,7 +15,6 @@ exports.articleAddAction = function () {
             tags: req.body.tags,
             content: req.body.content,
             abstract: req.body.abstract,
-            userCode: req.body.userCode,
             createTime: +new Date(),
             updateTime: +new Date()
         }

@@ -1,8 +1,16 @@
 import formatDate from './date'
-import { refUserRoleCode, status, articleStatus } from './commonFilter'
+import {
+    refUserRoleCode,
+    userStatus,
+    articleStatus,
+    menuLevel,
+    platType
+} from './commonFilter'
 export default {
     formatDate,
     refUserRoleCode,
-    status,
-    articleStatus
+    userStatus,
+    articleStatus,
+    menuLevel,
+    platType
 }

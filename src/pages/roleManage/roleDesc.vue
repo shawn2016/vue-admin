@@ -1,15 +1,15 @@
 <template>
   <div>
     <i-layout>
-      <i-breadcrumb t2="用户列表" t3="用户详情">
+      <i-breadcrumb t2="菜单列表" t3="菜单详情">
         <Button class="fr vue-back-btn" @click="$router.go(-1)" shape="circle">返回</Button>
       </i-breadcrumb>
       <div class="vue-panel">
         <Row type="flex" justify="center">
           <Col span="12" :md="14" :lg="12" :xs="24" :sm="24">
           <Form ref="formValidate" :model="formValidate" :label-width="100">
-            <FormItem label="用户名:" prop="userCode">
-              <label>{{formValidate.userCode}}</label>
+            <FormItem label="用户名:" prop="menuId">
+              <label>{{formValidate.menuId}}</label>
             </FormItem>
             <FormItem label="用户姓名:" prop="userName">
               <label>{{formValidate.userName}}</label>
@@ -50,7 +50,7 @@
 <script>
 import iLayout from "../../components/layout.vue";
 import iBreadcrumb from "../../components/breadcrumb.vue";
-import { getUserList } from "../../service/getData";
+import { getMenuList } from "../../service/getData";
 import filters from "../../filters";
 export default {
   name: "userDesc",
@@ -75,15 +75,15 @@ export default {
     };
   },
   created() {
-    if (this.$route.query && this.$route.query.userCode) {
-      this.findUserInfo(this.$route.query.userCode);
+    if (this.$route.query && this.$route.query.menuId) {
+      this.findMenuInfo(this.$route.query.menuId);
     }
   },
   methods: {
-    async findUserInfo(userCode) {
-      const res = await getUserList({
+    async findMenuInfo(menuId) {
+      const res = await getMenuList({
         params: {
-          userCode
+          menuId
         }
       });
       if (res.respCode === "000000" && res.values) {
