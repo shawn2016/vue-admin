@@ -64,7 +64,8 @@
     </div>
 </template>
 <script>
-import { routerArray, menuGroup } from "../router";
+import { routerArray } from "../router";
+import menuGroup from '../router/menuGroup'
 import { getStore } from "../config/mUtils";
 export default {
   filters: {

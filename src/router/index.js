@@ -126,43 +126,79 @@ const routers = {
     meta: {
       title: '用户详情'
     }
+  }],
+  categoryManage: [{
+    path: '/userManage/userList',
+    name: 'userList',
+    component: () => import('@/pages/userManage/userList'),
+    meta: {
+      title: '用户列表'
+    }
+  }, {
+    path: '/userManage/addUser',
+    name: 'addUser',
+    component: () => import('@/pages/userManage/addUser'),
+    meta: {
+      title: '新增用户'
+    }
+  }, {
+    path: '/userManage/userList/userDesc',
+    name: 'userDesc',
+    component: () => import('@/pages/userManage/userDesc'),
+    show: 'false',
+    meta: {
+      title: '用户详情'
+    }
+  }],
+  tagsManage: [{
+    path: '/userManage/userList',
+    name: 'userList',
+    component: () => import('@/pages/userManage/userList'),
+    meta: {
+      title: '用户列表'
+    }
+  }, {
+    path: '/userManage/addUser',
+    name: 'addUser',
+    component: () => import('@/pages/userManage/addUser'),
+    meta: {
+      title: '新增用户'
+    }
+  }, {
+    path: '/userManage/userList/userDesc',
+    name: 'userDesc',
+    component: () => import('@/pages/userManage/userDesc'),
+    show: 'false',
+    meta: {
+      title: '用户详情'
+    }
+  }], 
+  commentManage: [{
+    path: '/userManage/userList',
+    name: 'userList',
+    component: () => import('@/pages/userManage/userList'),
+    meta: {
+      title: '用户列表'
+    }
+  }, {
+    path: '/userManage/addUser',
+    name: 'addUser',
+    component: () => import('@/pages/userManage/addUser'),
+    meta: {
+      title: '新增用户'
+    }
+  }, {
+    path: '/userManage/userList/userDesc',
+    name: 'userDesc',
+    component: () => import('@/pages/userManage/userDesc'),
+    show: 'false',
+    meta: {
+      title: '用户详情'
+    }
   }]
 }
 
-export let menuGroup = {
-  home: {
-    name: "首页",
-    icon: "home"
-  },
-  userManage: {
-    name: "用户管理",
-    icon: "person-stalker"
-  },
-  roleManage: {
-    name: "角色管理",
-    icon: "ios-people"
-  },
-  articleManage: {
-    name: "文章管理",
-    icon: "ios-book"
-  },
-  tagsManage: {
-    name: "标签管理",
-    icon: "ios-pricetags"
-  },
-  commentManage: {
-    name: "评论管理",
-    icon: "chatbox-working"
-  },
-  menuManage: {
-    name: "菜单管理",
-    icon: "document-text"
-  },
-  pageManage: {
-    name: "页面管理",
-    icon: "ios-browsers"
-  }
-};
+
 
 function getRouters() {
   let router = []

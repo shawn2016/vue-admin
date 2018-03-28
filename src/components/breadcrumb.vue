@@ -11,7 +11,8 @@
 </template>
 
 <script>
-import router, { menuGroup } from "../router";
+import router from "../router";
+import menuGroup from "../router/menuGroup";
 export default {
   filters: {
     menuFilterName(name) {
