@@ -207,3 +207,6 @@ brew install tree  ||  apt-get install tree
 
 ```
 
+### License
+
+Licensed under the MIT License.
