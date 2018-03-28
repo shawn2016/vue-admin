@@ -59,7 +59,7 @@
         </router-link>
       </nav-content>
       <Table :loading="tableLoading" :data="tableData1" :columns="tableColumns1" stripe></Table>
-      <div class="vue-panel-page">
+      <div class="vue-panel-page" v-if="tableData1.length>10">
         <div style="float: right;">
           <Page :total="total" show-total show-elevator show-sizer :page-size="pageSize" :current="pageNo" @on-page-size-change="changeSize" @on-change="changePage"></Page>
         </div>

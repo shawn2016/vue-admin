@@ -1,7 +1,7 @@
 <template>
   <div>
     <i-layout>
-      <i-breadcrumb>
+      <i-breadcrumb :t2="breadcrumbTitle">
         <Button class="fr vue-back-btn" @click="$router.go(-1)" shape="circle">返回</Button>
       </i-breadcrumb>
       <div class="vue-panel">
@@ -58,13 +58,15 @@ import {
   getUserList
 } from "../../service/getData";
 export default {
-  name: "addUser",
+  name: "editArticle",
   components: {
     iLayout,
     editor,
     iBreadcrumb
   },
   created() {
+    this.getUserList();
+    console.log(this.$route.query)
     if (this.$route.query && this.$route.query.id) {
       this.findArticleInfo(this.$route.query.id);
       this.breadcrumbTitle = "修改文章";
@@ -90,6 +92,7 @@ export default {
     };
 
     return {
+      breadcrumbTitle:'',
       userList: [],
       ruleValidate: {
         articleTitle: [
@@ -179,9 +182,6 @@ export default {
         articleTitle: ""
       }
     };
-  },
-  created() {
-    this.getUserList();
   },
   methods: {
     async findArticleInfo(id) {

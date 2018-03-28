@@ -1,138 +1,195 @@
-# vue-test
+# Vue-admin
 
-> A Vue.js project
+这是一个不简单的全栈后台管理系统。
 
-所属平台
+### 想法
 
-前台：100
+做一个全栈项目，可以发表文章，管理评论、用户、标签、文章、添加图片等类似于wordpress的项目，主要是学习mongoose操作mongodb数据库，学习一对多，多对多关系设计。
 
-后台：200
+由于工作量很大，将后期陆续完成。
 
-菜单级别：
+主要功能有：
 
-一级：100
+1. 首页 (一些文章新增，用户动态)
+2. 文章管理（文章列表+新增文章）
+3. 菜单管理（分配菜单）
+4. 角色管理（暂时只有两种用户：管理员+一般用户）
+5. 页面管理（后期新增一些模板，可以新增菜单链接相应页面）
+6. 文章标签管理
+7. 文章分类管理
+8. 用户管理
 
-二级：200
+### 技术栈
 
-后期考虑：
-
-1. session
-2. cookie
-
-
-
-routes：路由分发
-
-controller：mvc中C层，做逻辑处理
-
-models：mvc中m层，数据表模型
-
-DBsql：模型sql操作
-
-DBhelper：公共sql方法
-
-主菜单：
-
-首页：
-
-1. 最新文章，文章数，文章标题
-2. 最新评论10条，总评价数
-3. 文章数，文章标题
-
-菜单管理
-
-1. 新增菜单
-2. 修改菜单
-3. 增删改查
-
-角色管理
-
-1. 新增菜单
-2. 修改菜单
-3. 增删改查
-
-文章管理
-
-1. 新增文章
-2. 修改文章
-3. 文章列表(管理员all，user->自己)
-4. 增删改查
-
-### 功能添加
-
-1. 返回菜单（根据角色）
-2. 用户信息
-3. 修改密码
-4. 添加角色管理
-5. 用户发表文章
-6. 管理文章
-7. 安全退出
-
-### 加工数据
-
-```
-/*@方法名 filterData 
-* @参数 obj {
-* res 返回结果 必传
-* respCode 返回码 默认："000000" 
-* respMsg 返回信息 默认："处理成功" 
-* }
-*/
-例如：
-filterData(obj){
-
-}
-```
-
-
-
-### 定义一些码值：
-
-```
-000000	处理成功		
-900000	处理失败		处理失败
-900001	签名校验失败		系统异常，请稍后重试或联系客服人员
-900002	报文格式非法		系统异常，请稍后重试或联系客服人员
-900003	用户鉴权失败		暂未开通权限，请联系管理员
-900004	参数校验失败		系统异常，请稍后重试或联系客服人员
-900005	TOKEN鉴权失败		由于您长时间未登录或在其他浏览器上登录，请重新登录
-900006	图片验证码已过期		验证码已过期，请重新获取
-900007	图片验证码不正确		验证码不正确，请重新输入
-900008	短信验证码已过期		验证码已过期，请重新获取
-900009	短信验证码不正确		验证码不正确，请重新输入
-900010	UKey验证参数为空		Ukey验证失败，请联系管理员或客服人员
-900011	UKey验证失败		Ukey与账号不符，请核对
-900012	触发60秒一次		申请过于频繁，请1分钟后再试
-900013	触发一天N次		获取的次数过于频繁，请明天再试
-900014	短信发送异常		发送短信失败，请稍后重试
-999999	系统异常		系统异常，请稍后重试或联系客服人员系统异常
-```
+- [ ] vue2
+- [ ] vuex
+- [ ] axios
+- [ ] vue-router
+- [ ] express
+- [ ] mongoose
+- [ ] iview
+- [ ] vue-echarts
 
 ### 效果
+
 <p align="center">
 <a href="https://github.com/shawn2016/vue-admin.git"><img src="https://github.com/shawn2016/vue-admin/blob/master/static/dashboard.png" /></a>
 </p>
 
-## Build Setup
+<p align="center">
+<a href="https://github.com/shawn2016/vue-admin.git"><img src="https://github.com/shawn2016/vue-admin/blob/master/static/article.png" /></a>
+</p>
+
+<p align="center">
+<a href="https://github.com/shawn2016/vue-admin.git"><img src="https://github.com/shawn2016/vue-admin/blob/master/static/addArticle.png" /></a>
+</p>
+
+<p align="center">
+<a href="https://github.com/shawn2016/vue-admin.git"><img src="https://github.com/shawn2016/vue-admin/blob/master/static/updateArtilce.png" /></a>
+</p>
+
+### 下载&安装
 
 ``` bash
-# install dependencies
-npm install
-
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
-
-# run unit tests
-npm run unit
-
-# run all tests
-npm test
+git clone https://github.com/shawn2016/vue-admin.git
+cd vue-admin
+npm i
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+### 运行
+
+```
+npm start
+```
+
+### 后台服务
+
+先启动**mongodb**服务：https://www.cnblogs.com/wzlblog/p/6364045.html)
+
+```
+npm run server
+```
+
+### 目录说明
+
+```js
+.
+
+├── README.md
+├── app.js #启动文件
+├── beizhu.md #字段说明
+├── build #vue-cli
+│   ├── build.js
+│   ├── check-versions.js
+│   ├── logo.png
+│   ├── utils.js
+│   ├── vue-loader.conf.js
+│   ├── webpack.base.conf.js
+│   ├── webpack.dev.conf.js
+│   └── webpack.prod.conf.js
+├── config
+│   ├── db.js #mogodb地址
+│   ├── dev.env.js
+│   ├── index.js
+│   ├── prod.env.js
+│   └── test.env.js
+├── index.html
+├── package.json
+├── router
+│   └── index.js #路由分发
+├── server #后台服务层
+│   ├── DBhelper #公共sql方法
+│   │   └── dbHelper.js
+│   ├── DBsql #模型sql操作
+│   │   ├── articleDao.js
+│   │   ├── homeDao.js
+│   │   ├── menuDao.js
+│   │   ├── pageDao.js
+│   │   ├── roleDao.js
+│   │   └── userDao.js
+│   ├── controller #mvc中C层，做逻辑处理
+│   │   ├── articleManagementController.js
+│   │   ├── homeManagementController.js
+│   │   ├── menuManagementController.js
+│   │   ├── pageManagementController.js
+│   │   ├── roleManagementController.js
+│   │   └── userManagementController.js
+│   ├── models # mvc中m层，数据表模型
+│   │   ├── article.js
+│   │   ├── home.js
+│   │   ├── menu.js
+│   │   ├── page.js
+│   │   ├── role.js
+│   │   └── user.js
+│   └── utils
+│       ├── filterData.js # 返回格式处理
+├── src #前台
+│   ├── App.vue
+│   ├── assets
+│   │   └── styles
+│   ├── components #公用组件
+│   │   ├── breadcrumb.vue #面包屑
+│   │   ├── bus.js #加载条
+│   │   ├── editor.vue #富文本编辑器
+│   │   ├── layout.vue #布局
+│   │   └── navcontent.vue #导航条
+│   ├── config
+│   │   ├── env.js
+│   │   ├── index.js
+│   │   └── mUtils.js
+│   ├── data # mock数据
+│   │   ├── bar.js
+│   │   ├── connect.js
+│   │   ├── logo.js
+│   │   ├── map.js
+│   │   ├── pie.js
+│   │   ├── polar.js
+│   │   ├── scatter.js
+│   │   └── theme.json
+│   ├── favicon.ico
+│   ├── filters #过滤器
+│   │   ├── commonFilter.js
+│   │   ├── date.js
+│   │   └── index.js
+│   ├── langs #富文本编辑器中文
+│   │   └── zh_CN.js
+│   ├── libs #请求方法与配置
+│   │   ├── baseUrl.js
+│   │   ├── fetch.js
+│   │   ├── tree
+│   │   └── util.js
+│   ├── main.js
+│   ├── pages #所有页面
+│   │   ├── articleManage #文章管理
+│   │   ├── home #首页
+│   │   ├── login # 登陆 注册 重置密码
+│   │   ├── menuManage #菜单管理
+│   │   ├── pageManage #页面管理
+│   │   ├── roleManage #角色管理
+│   │   └── userManage #用户管理
+│   ├── router #vue路由
+│   │   └── index.js
+│   ├── service #所有请求由这里发出
+│   │   ├── getData.js
+│   │   └── randomWord.js
+│   ├── skins #富文本编辑器
+│   │   └── lightgray
+│   └── store #vuex
+│       ├── action.js
+│       ├── getters.js
+│       ├── index.js
+│       ├── mutation-types.js
+│       └── mutations.js
+├── static #静态资源
+│   ├── addArticle.png
+│   ├── article.png
+│   ├── dashboard.png
+│   └── updateArtilce.png
+├── test 
+    └── unit
+        ├── jest.conf.js
+        ├── setup.js
+        └── specs
+
+```
+
