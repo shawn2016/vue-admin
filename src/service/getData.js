@@ -160,3 +160,42 @@ export const getMenuList = (obj) => fetch({
     method: "post",
     data: obj
 });
+
+
+
+/**
+ * 创建分类
+ */
+export const createCategory = (obj) => fetch({
+    url: "/category/create",
+    method: "post",
+    data: obj
+});
+/**
+ * 更新分类信息
+ */
+export const updateCategory = (obj) => fetch({
+    url: "/category/update",
+    method: "post",
+    data: obj
+});
+/**
+ * 删除分类信息
+ */
+export const deleteCategoryList = (id) => fetch({
+    url: `/category/remove`,
+    method: "post",
+    data: {
+        _id: id
+    }
+});
+
+
+/**
+ * 获取分类信息列表
+ */
+export const getCategoryList = (obj) => fetch({
+    url: "/category/list",
+    method: "post",
+    data: obj
+});

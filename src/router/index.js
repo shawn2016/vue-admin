@@ -128,18 +128,18 @@ const routers = {
     }
   }],
   categoryManage: [{
-    path: '/userManage/userList',
-    name: 'userList',
-    component: () => import('@/pages/userManage/userList'),
+    path: '/categoryManage/categoryList',
+    name: 'categoryList',
+    component: () => import('@/pages/categoryManage/categoryList'),
     meta: {
-      title: '用户列表'
+      title: '分类列表'
     }
   }, {
-    path: '/userManage/addUser',
-    name: 'addUser',
-    component: () => import('@/pages/userManage/addUser'),
+    path: '/categoryManage/addCategory',
+    name: 'addCategory',
+    component: () => import('@/pages/categoryManage/addCategory'),
     meta: {
-      title: '新增用户'
+      title: '新增分类'
     }
   }, {
     path: '/userManage/userList/userDesc',

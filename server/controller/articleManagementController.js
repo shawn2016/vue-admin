@@ -1,5 +1,9 @@
 var dbHelper = require('../DBhelper/dbHelper');
 var articleDao = require('../DBSql/articleDao');
+var user_articleController = require('./user_articleController');
+var user_articleController = require('./user_articleController');
+var articleManagementController = require('./articleManagementController');
+
 /**
  * 新增文章
  * @returns {Function}
@@ -27,6 +31,10 @@ exports.articleAddAction = function () {
             errorRespMsg: '文章已存在'
         }
         articleDao.addArticle(article, dbHelper, options, function (result) {
+            articleManagementController.articleFindAction({})
+            // user_articleController({
+            //     userId:result.body._id
+            // })
             res.json(result);
         });
     }
@@ -37,7 +45,7 @@ exports.articleAddAction = function () {
  * 获取文章列表
  * @returns {Function}
  */
-exports.articleFindAction = function () {
+exports.articleFindAction = function (params) {
     return function (req, res) {
         let conditions = {};
         // 处理时间数组
@@ -51,7 +59,7 @@ exports.articleFindAction = function () {
             delete (req.body.params.createTime)
         }
         // 赋值
-        conditions = req.body
+        conditions = req.body || params
         articleDao.findArticle(conditions, dbHelper, function (result) {
             res.json(result)
         });

@@ -17,11 +17,15 @@ exports.addData = function (model, conditions, options, callback) {
             return false;
         }
         model.create(conditions, function (err, result) {
+            console.log(result)
             if (err) {
                 console.log(error);
                 let obj = filterData({
                     respMsg: '服务器异常',
-                    respCode: '999999'
+                    respCode: '999999',
+                    body: {
+                        _id: result._id
+                    }
                 })
                 callback(obj);
             } else {
@@ -114,7 +118,6 @@ exports.removeData = function (model, conditions, callback) {
  * @param callback 
  */
 exports.findData = function (model, conditions, fields, options, callback) {
-    console.log(conditions)
     model.count(conditions.params, function (err, total) {
         if (err) {
             console.log(err)
@@ -132,6 +135,7 @@ exports.findData = function (model, conditions, fields, options, callback) {
                 })
                 callback(obj);
             } else {
+                console.log(result)
                 if (result.length != 0) {
                     let filterParams = {
                         values: result
