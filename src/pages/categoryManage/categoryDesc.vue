@@ -11,7 +11,7 @@
             <FormItem label="分类名:" prop="categoryCode">
               <label>{{formValidate.categoryCode}}</label>
             </FormItem>
-            <FormItem label="分类姓名:" prop="categoryName">
+            <FormItem label="分类名:" prop="categoryName">
               <label>{{formValidate.categoryName}}</label>
             </FormItem>
             <FormItem label="创建时间:" prop="createTime">
@@ -19,21 +19,6 @@
             </FormItem>
             <FormItem label="最近更新时间:" prop="updateTime">
               <label>{{formValidate.updateTime | formatDate}}</label>
-            </FormItem>
-            <FormItem label="手机号码:" prop="phonenum">
-              <label>{{formValidate.phonenum}}</label>
-            </FormItem>
-            <FormItem label="身份证号:" prop="identifyNo">
-              <label>{{formValidate.identifyNo}}</label>
-            </FormItem>
-            <FormItem label="分类类型:" prop="refCategoryRoleCode">
-              <label>{{formValidate.refCategoryRoleCode | refCategoryRoleCode}}</label>
-            </FormItem>
-            <FormItem label="分类状态:" prop="status">
-              <label>{{formValidate.status | status}}</label>
-            </FormItem>
-            <FormItem label="职务:">
-              <label>{{formValidate.categoryDuty}}</label>
             </FormItem>
             <FormItem label="备注:" prop="desc">
               <label>{{formValidate.desc}}</label>
@@ -61,12 +46,6 @@ export default {
   filters: {
     formatDate(date) {
       return filters.formatDate(date, "yyyy-MM-dd hh:mm:ss");
-    },
-    status(name) {
-      return filters.categoryStatus(name);
-    },
-    refCategoryRoleCode(name) {
-      return filters.refCategoryRoleCode(name);
     }
   },
   data() {

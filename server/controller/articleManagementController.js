@@ -1,9 +1,6 @@
 var dbHelper = require('../DBhelper/dbHelper');
 var articleDao = require('../DBSql/articleDao');
-var user_articleController = require('./user_articleController');
-var user_articleController = require('./user_articleController');
-var articleManagementController = require('./articleManagementController');
-
+var category_articleController = require('./category_articleController');
 /**
  * 新增文章
  * @returns {Function}
@@ -12,10 +9,8 @@ exports.articleAddAction = function () {
     return function (req, res) {
         let article = {
             articleTitle: req.body.articleTitle,
-            author: req.body.author,
             status: req.body.status,
             userCode: req.body.userCode,
-            category: req.body.category,
             tags: req.body.tags,
             content: req.body.content,
             abstract: req.body.abstract,
@@ -31,10 +26,13 @@ exports.articleAddAction = function () {
             errorRespMsg: '文章已存在'
         }
         articleDao.addArticle(article, dbHelper, options, function (result) {
-            articleManagementController.articleFindAction({})
-            // user_articleController({
-            //     userId:result.body._id
-            // })
+            // 添加文章与分类 关联关系
+            for (let i = 0; i < req.body.category.length; i++) {
+                category_articleController.category_articleAddAction({
+                    articleId: result.body._id,
+                    categoryId: req.body.category[i]
+                })()
+            }
             res.json(result);
         });
     }
@@ -45,7 +43,7 @@ exports.articleAddAction = function () {
  * 获取文章列表
  * @returns {Function}
  */
-exports.articleFindAction = function (params) {
+exports.articleFindAction = function () {
     return function (req, res) {
         let conditions = {};
         // 处理时间数组
@@ -59,9 +57,33 @@ exports.articleFindAction = function (params) {
             delete (req.body.params.createTime)
         }
         // 赋值
-        conditions = req.body || params
+        conditions = req.body
         articleDao.findArticle(conditions, dbHelper, function (result) {
-            res.json(result)
+            let params = {}
+            console.log(conditions)
+            if (conditions.params && conditions.params._id) {
+                params = {
+                    articleId: conditions.params._id
+                }
+            }
+            // 查出文章的分类
+            category_articleController.category_articleFindRefAction(params).then((resp) => {
+                for (let j = 0; j < result.values.length; j++) {
+                    for (let i = 0; i < resp.values.length; i++) {
+                        if (String(resp.values[i].articleId) == String(result.values[j]._id)) {
+                            if (req.body.edit) {
+                                result.values[j].category.push(resp.values[i].categoryId._id)
+                            } else {
+                                result.values[j].category.push(resp.values[i].categoryId.categoryName)
+                            }
+                        }
+                    }
+                }
+                res.json(result)
+            }).catch((err) => {
+                res.json(result)
+                console.log(err)
+            })
         });
     }
 }
@@ -73,9 +95,18 @@ exports.articleFindAction = function (params) {
 exports.articleRemoveAction = function () {
     return function (req, res) {
         var conditions = req.body;
+        console.log(conditions)
         articleDao.removeArticle(conditions, dbHelper, function (result) {
-            res.json(result);
-        });
+            // 删除表关联
+            category_articleController.category_articleRemoveAction({
+                articleId: req.body._id
+            }).then((resp) => {
+                res.json(result)
+            }).catch((err) => {
+                console.log(err)
+                res.json(result)
+            })
+        })
     }
 }
 /**
@@ -89,25 +120,33 @@ exports.articleUpdateAction = function () {
         };
         var update = {
             $set: {
-                userCode: req.body.userCode,
-                userName: req.body.userName,
-                identifyNo: req.body.identifyNo,
-                refUserRoleCode: req.body.refUserRoleCode,
+                articleTitle: req.body.articleTitle,
                 status: req.body.status,
-                userDuty: req.body.userDuty,
-                phonenum: req.body.phonenum,
-                updateTime: +new Date(),
-                desc: req.body.desc,
-                password: req.body.password,
+                userCode: req.body.userCode,
+                tags: req.body.tags,
+                content: req.body.content,
+                abstract: req.body.abstract,
+                userCode: req.body.userCode,
+                updateTime: +new Date()
             }
         }
         var options = {
-            new: true
+
         }//{upsert:false};
 
         articleDao.updateArticle(conditions, update, options, dbHelper, function (result) {
-            res.json(result);
+            // 删除表关联
+            category_articleController.category_articleRemoveAction({
+                articleId: req.body._id
+            }).then((resp) => {
+                for (let i = 0; i < req.body.category.length; i++) {
+                    category_articleController.category_articleAddAction({
+                        articleId: req.body._id,
+                        categoryId: req.body.category[i]
+                    })()
+                }
+            })
+            res.json(result)
         });
-        //????????????update user_schoolClass???userid ?scoolClassId
     }
 }

@@ -9,14 +9,14 @@
           <FormItem label="文章标题:" prop="articleTitle">
             <Input clearable v-model="formItem.articleTitle" placeholder="请输入文章标题"></Input>
           </FormItem>
-          <FormItem label="文章分类:" prop="category">
-            <Select not-found-text="没有该文章分类" placeholder="请选择文章分类" clearable v-model="formItem.category" filterable multiple>
-              <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          <FormItem label="文章作者:" prop="userCode">
+            <Select @on-change="getCategory" placeholder="请选择文章作者" clearable v-model="formItem.userCode">
+              <Option :key="x.userCode" v-for="x in userList" :value="x.userCode">{{x.userName}}</Option>
             </Select>
           </FormItem>
-          <FormItem label="文章作者:" prop="author">
-            <Select placeholder="请选择文章作者" clearable v-model="formItem.author">
-              <Option :key="x.userCode" v-for="x in userList" :value="x.userCode">{{x.userName}}</Option>
+          <FormItem label="文章分类:" prop="category">
+            <Select not-found-text="该用户还没有文章分类" placeholder="请选择文章分类" clearable v-model="formItem.category" filterable multiple>
+              <Option v-for="item in categoryList" :value="item._id" :key="item._id">{{ item.categoryName }}</Option>
             </Select>
           </FormItem>
           <FormItem label="文章内容:" prop="content">
@@ -55,7 +55,8 @@ import {
   saveArticle,
   getArticleList,
   updateArticle,
-  getUserList
+  getUserList,
+  getCategoryList
 } from "../../service/getData";
 export default {
   name: "editArticle",
@@ -66,7 +67,6 @@ export default {
   },
   created() {
     this.getUserList();
-    console.log(this.$route.query)
     if (this.$route.query && this.$route.query.id) {
       this.findArticleInfo(this.$route.query.id);
       this.breadcrumbTitle = "修改文章";
@@ -77,6 +77,9 @@ export default {
   },
   data() {
     const validateCategory = (rule, value, callback) => {
+      if (!this.formItem.userCode) {
+        callback(new Error("请选择文章作者"));
+      }
       if (value.length === 0) {
         callback(new Error("请选择文章分类"));
       } else {
@@ -92,7 +95,8 @@ export default {
     };
 
     return {
-      breadcrumbTitle:'',
+      categoryList: [],
+      breadcrumbTitle: "",
       userList: [],
       ruleValidate: {
         articleTitle: [
@@ -102,6 +106,13 @@ export default {
             trigger: "blur"
           }
         ],
+        platType: [
+          {
+            required: true,
+            message: "请选择所属平台",
+            trigger: "change"
+          }
+        ],
         status: [
           {
             required: true,
@@ -109,7 +120,7 @@ export default {
             trigger: "blur"
           }
         ],
-        author: [
+        userCode: [
           {
             required: true,
             message: "请选择文章作者",
@@ -184,17 +195,28 @@ export default {
     };
   },
   methods: {
+    async getCategory() {
+      const res = await getCategoryList({
+        params: {
+          userCode: this.formItem.userCode
+        }
+      });
+      if (res.respCode === "000000" && res.values) {
+        this.categoryList = res.values;
+      }
+    },
     async findArticleInfo(id) {
       const res = await getArticleList({
         params: {
           _id: id
-        }
+        },
+        edit: true
       });
       if (res.respCode === "000000" && res.values) {
         this.formItem = res.values[0];
       }
     },
-    // 获取表格数据
+    // 获取用户列表
     async getUserList() {
       const res = await getUserList({
         params: {}
@@ -202,7 +224,6 @@ export default {
       if (res && res.respCode === "000000") {
         if (res.values) {
           this.userList = res.values;
-          console.log(res.values);
         } else {
           this.userList = [];
         }

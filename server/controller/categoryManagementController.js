@@ -11,7 +11,6 @@ exports.categoryAddAction = function () {
         let category = {
             categoryCode: req.body.categoryCode,
             categoryName: req.body.categoryName,
-            platType: req.body.platType,
             userCode: req.body.userCode,
             createTime: +new Date(),
             updateTime: +new Date(),
@@ -19,7 +18,8 @@ exports.categoryAddAction = function () {
         }
         let options = {
             params: {
-                "categoryCode": req.body.categoryCode,
+                "categoryName": req.body.categoryName,
+                "userCode": req.body.userCode
             },
             errorRespMsg: '分类已存在'
         }

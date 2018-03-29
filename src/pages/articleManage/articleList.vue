@@ -18,7 +18,7 @@
           </Col>
           <Col :xs="24" :sm="24" :md="8" :lg="8">
           <FormItem label="文章作者:">
-            <Select v-model="formItem.author">
+            <Select v-model="formItem.userCode">
               <Option value="USER">普通用户</Option>
               <Option value="ADMIN">管理员</Option>
             </Select>
@@ -59,7 +59,7 @@
         </router-link>
       </nav-content>
       <Table :loading="tableLoading" :data="tableData1" :columns="tableColumns1" stripe></Table>
-      <div class="vue-panel-page" v-if="tableData1.length>10">
+      <div class="vue-panel-page" >
         <div style="float: right;">
           <Page :total="total" show-total show-elevator show-sizer :page-size="pageSize" :current="pageNo" @on-page-size-change="changeSize" @on-change="changePage"></Page>
         </div>
@@ -132,7 +132,7 @@ export default {
         },
         {
           title: "作者",
-          key: "author"
+          key: "userCode"
         },
         {
           title: "文章摘要",
@@ -271,7 +271,6 @@ export default {
   },
   methods: {
     changePage(pageNo) {
-      console.log(pageNo);
       this.pageNo = pageNo;
       this.getList();
     },

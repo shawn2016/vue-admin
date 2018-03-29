@@ -11,7 +11,7 @@
             <span class="span-title">发布时间：</span>
             <span class="desc">{{formValidate.updateTime | formatDate}}</span>
             <span class="span-title" style="margin-left:15px;">来源：</span>
-            <span class="desc">{{formValidate.author}}</span>
+            <span class="desc">{{formValidate.userCode}}</span>
           </div>
 
           <div class="category">

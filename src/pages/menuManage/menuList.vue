@@ -235,7 +235,6 @@ export default {
   },
   methods: {
     changePage(pageNo) {
-      console.log(pageNo);
       this.pageNo = pageNo;
       this.getList();
     },

@@ -22,26 +22,21 @@
           </FormItem>
           </Col>
           <Col :xs="24" :sm="24" :md="8" :lg="8">
-          <FormItem label="创建人:">
-            <Select v-model="formItem.userCode">
-              <Option value="USER">普通分类</Option>
-              <Option value="ADMIN">管理员</Option>
+          <FormItem label="创建人:" prop="userCode">
+            <Select placeholder="请选择创建人" clearable v-model="formItem.userCode">
+              <Option :key="x.userCode" v-for="x in userList" :value="x.userCode">{{x.userName}}</Option>
             </Select>
           </FormItem>
           </Col>
           <Col :xs="24" :sm="24" :md="8" :lg="8">
-          <FormItem label="所属平台:">
-            <Select v-model="formItem.platType">
-              <Option value="100">前台</Option>
-              <Option value="200">后台</Option>
-            </Select>
+          <FormItem>
+            <Button type="primary" @click="getList" style="width:80px" long shape="circle">查询</Button>
+            <Button type="ghost" style="width:80px;margin-left: 8px" @click="clearForm" shape="circle">清除</Button>
           </FormItem>
           </Col>
+
         </Row>
-        <FormItem>
-          <Button type="primary" @click="getList" style="width:80px" long shape="circle">查询</Button>
-          <Button type="ghost" style="width:80px;margin-left: 8px" @click="clearForm" shape="circle">清除</Button>
-        </FormItem>
+
       </Form>
     </div>
     <div class="vue-panel-table">
@@ -70,7 +65,11 @@ import iLayout from "../../components/layout.vue";
 import iBreadcrumb from "../../components/breadcrumb.vue";
 import navContent from "../../components/navcontent.vue";
 import filters from "../../filters";
-import { getCategoryList, deleteCategoryList } from "../../service/getData";
+import {
+  getCategoryList,
+  deleteCategoryList,
+  getUserList
+} from "../../service/getData";
 export default {
   name: "categoryManage",
   components: {
@@ -86,6 +85,7 @@ export default {
   },
   data() {
     return {
+      userList: [],
       pageSize: 10,
       total: 0,
       pageNo: 1,
@@ -134,17 +134,6 @@ export default {
         {
           title: "创建人",
           key: "userCode"
-        },
-        {
-          title: "所属平台",
-          key: "platType",
-          render: (h, params) => {
-            const row = params.row;
-            const platType = row.platType
-              ? filters.platType(row.platType)
-              : row.platType;
-            return h("span", platType);
-          }
         },
         {
           title: "操作",
@@ -215,8 +204,20 @@ export default {
     };
   },
   methods: {
+    // 获取用户列表
+    async getUserList() {
+      const res = await getUserList({
+        params: {}
+      });
+      if (res && res.respCode === "000000") {
+        if (res.values) {
+          this.userList = res.values;
+        } else {
+          this.userList = [];
+        }
+      }
+    },
     changePage(pageNo) {
-      console.log(pageNo);
       this.pageNo = pageNo;
       this.getList();
     },
@@ -293,6 +294,7 @@ export default {
     }
   },
   created() {
+    this.getUserList();
     this.getList();
   }
 };

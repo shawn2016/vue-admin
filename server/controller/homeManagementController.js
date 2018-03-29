@@ -8,7 +8,7 @@ exports.articleAddAction = function () {
     return function (req, res) {
         let article = {
             articleTitle: req.body.articleTitle,
-            author: req.body.author,
+            userCode: req.body.userCode,
             status: req.body.status,
             userCode: req.body.userCode,
             category: req.body.category,

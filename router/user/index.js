@@ -144,8 +144,6 @@ router.post("/login", function (req, res) {
         "password": req.body.password
     },
         function (err, doc) {
-            console.log(doc)
-
             if (err) {
 
                 let obj = filterData({
@@ -183,8 +181,6 @@ router.post("/userinfo", function (req, res) {
         "userCode": req.body.userCode
     },
         function (err, doc) {
-            console.log(doc)
-
             if (err) {
 
                 let obj = filterData({

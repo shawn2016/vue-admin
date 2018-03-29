@@ -18,15 +18,8 @@
               <Input v-model="formValidate.categoryName" placeholder="请输入分类名"></Input>
             </FormItem>
             <FormItem label="创建人:" prop="userCode">
-              <Select v-model="formValidate.userCode" placeholder="请选择创建人">
-                <Option value="USER">普通分类</Option>
-                <Option value="ADMIN">管理员</Option>
-              </Select>
-            </FormItem>
-            <FormItem label="所属平台:" prop="platType">
-              <Select v-model="formValidate.platType" placeholder="请选择所属平台">
-                <Option value="100">前台</Option>
-                <Option value="200">后台</Option>
+              <Select placeholder="请选择创建人" clearable v-model="formValidate.userCode">
+                <Option :key="x.userCode" v-for="x in userList" :value="x.userCode">{{x.userName}}</Option>
               </Select>
             </FormItem>
             <FormItem label="备注:" prop="desc">
@@ -52,7 +45,8 @@ import iBreadcrumb from "../../components/breadcrumb.vue";
 import {
   getCategoryList,
   updateCategory,
-  createCategory
+  createCategory,
+  getUserList
 } from "../../service/getData";
 import md5 from "js-md5";
 export default {
@@ -63,6 +57,7 @@ export default {
   },
   data() {
     return {
+      userList:[],
       formValidate: {},
       ruleValidate: {
         categoryName: [
@@ -79,13 +74,6 @@ export default {
             trigger: "change"
           }
         ],
-        platType: [
-          {
-            required: true,
-            message: "请选择所属平台",
-            trigger: "change"
-          }
-        ],
         desc: [
           {
             type: "string",
@@ -98,6 +86,7 @@ export default {
     };
   },
   created() {
+    this.getUserList();
     if (this.$route.query && this.$route.query.categoryCode) {
       this.formValidate.categoryCode = this.$route.query.categoryCode;
       this.findCategoryInfo();
@@ -110,6 +99,19 @@ export default {
     }
   },
   methods: {
+    // 获取表格数据
+    async getUserList() {
+      const res = await getUserList({
+        params: {}
+      });
+      if (res && res.respCode === "000000") {
+        if (res.values) {
+          this.userList = res.values;
+        } else {
+          this.userList = [];
+        }
+      }
+    },
     makeCode() {
       this.formValidate.categoryCode = Vue.set(
         this.formValidate,
@@ -146,7 +148,7 @@ export default {
                   fontWeight: "800"
                 }
               },
-              "123456"
+              "当前时间戳和随机字母组成"
             )
           ]);
         }
@@ -162,7 +164,6 @@ export default {
           categoryName: this.formValidate.categoryName,
           userCode: this.formValidate.userCode,
           desc: this.formValidate.desc,
-          platType: this.formValidate.platType,
           updateTime: +new Date()
         });
       } else {
@@ -172,7 +173,6 @@ export default {
           categoryName: this.formValidate.categoryName,
           userCode: this.formValidate.userCode,
           desc: this.formValidate.desc,
-          platType: this.formValidate.platType,
           createTime: +new Date(),
           updateTime: +new Date()
         });

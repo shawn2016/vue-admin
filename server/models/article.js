@@ -4,13 +4,12 @@ const articleSchema = mongoose.Schema({
     articleTitle: String,
     createTime: Date,
     updateTime: Date,
-    author: String,
-    category: Array,
     userCode:String,
     content:String,
     abstract: String,
     tags: Array,
-    status:String
+    category:Array,
+    status:String,
 }, { collection: 'article' })
 module.exports = {
     getModel: function () {

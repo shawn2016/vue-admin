@@ -54,13 +54,12 @@ router.post("/list", (req, res) => {
 });
 // //更新文章
 router.post("/update", (req, res) => {
-    console.log(req.body.id)
     Article.findOneAndUpdate(
         { _id: req.body.id },
         {
             $set: {
                 articleTitle: req.body.articleTitle,
-                author: req.body.author,
+                userCode: req.body.userCode,
                 status: req.body.status,
                 userCode: req.body.userCode,
                 category: req.body.category,
@@ -100,7 +99,7 @@ router.delete("/list/:id", (req, res) => {
 router.post("/create", function (req, res) {
     Article.create({
         articleTitle: req.body.articleTitle,
-        author: req.body.author,
+        userCode: req.body.userCode,
         status: req.body.status,
         userCode: req.body.userCode,
         category: req.body.category,
@@ -153,7 +152,7 @@ router.post("/articleinfo", function (req, res) {
                         articleTitle: doc[0].articleTitle,
                         createTime: doc[0].createTime,
                         updateTime: doc[0].updateTime,
-                        author: doc[0].author,
+                        userCode: doc[0].userCode,
                         category: doc[0].category,
                         userCode: doc[0].userCode,
                         content: doc[0].content,

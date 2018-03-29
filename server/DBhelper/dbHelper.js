@@ -8,7 +8,7 @@ const filterData = require('../utils/filterData')
  */
 exports.addData = function (model, conditions, options, callback) {
     model.findOne(options.params, function (err, doc) {
-        if (doc) {
+        if (doc && !options.isNotOne) {
             let obj = filterData({
                 respCode: "900000",
                 respMsg: options.errorRespMsg || "已存在"
@@ -17,19 +17,20 @@ exports.addData = function (model, conditions, options, callback) {
             return false;
         }
         model.create(conditions, function (err, result) {
-            console.log(result)
+            console.log('++++++++++++++++', result)
             if (err) {
                 console.log(error);
                 let obj = filterData({
                     respMsg: '服务器异常',
-                    respCode: '999999',
-                    body: {
-                        _id: result._id
-                    }
+                    respCode: '999999'
+
                 })
                 callback(obj);
             } else {
                 let obj = filterData({
+                    body: {
+                        _id: result._id
+                    },
                     respMsg: '添加成功',
                 })
                 callback(obj);
@@ -57,6 +58,7 @@ exports.updateData = function (model, conditions, update, options, callback) {
             })
             callback(obj);
         } else {
+            console.log(result)
             if (result.n != 0) {
                 let obj = filterData({
                     respMsg: '修改成功'
@@ -82,7 +84,6 @@ exports.updateData = function (model, conditions, update, options, callback) {
  * @param callback 
  */
 exports.removeData = function (model, conditions, callback) {
-
     model.remove(conditions, function (error, result) {
         if (error) {
             console.log(error);
@@ -135,7 +136,6 @@ exports.findData = function (model, conditions, fields, options, callback) {
                 })
                 callback(obj);
             } else {
-                console.log(result)
                 if (result.length != 0) {
                     let filterParams = {
                         values: result
@@ -180,16 +180,33 @@ exports.findDataPopulation = function (model, conditions, path, fields, refmodel
         .populate(path, fields, refmodel, options)
         .exec(function (err, result) {
             if (err) {
-                console.log(err);
-                callback({ success: 0, flag: 'population find data fail' });
+                console.log(error);
+                let obj = filterData({
+                    respMsg: '服务器异常',
+                    respCode: '999999'
+                })
+                callback(obj);
             } else {
                 if (result.length != 0) {
-                    console.log('population find success!');
-                    callback({ success: 1, flag: 'population find data success', result: result });
+                    let filterParams = {
+                        values: result
+                    }
+                    if (conditions.pagenation) {
+                        filterParams.pagenation = {
+                            itemCount: total,
+                            pageNo: conditions.pagenation.pageNo,
+                            pageSize: conditions.pagenation.pageSize
+                        }
+                    }
+                    let obj = filterData(filterParams)
+                    callback(obj)
                 }
                 else {
-                    console.log('population find fail:no this data!');
-                    callback({ success: 0, flag: 'population find fail:no this data!' });
+                    let obj = filterData({
+                        respMsg: '暂无数据',
+                        respCode: '000000'
+                    })
+                    callback(obj);
                 }
 
             }

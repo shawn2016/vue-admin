@@ -142,12 +142,12 @@ const routers = {
       title: '新增分类'
     }
   }, {
-    path: '/userManage/userList/userDesc',
-    name: 'userDesc',
-    component: () => import('@/pages/userManage/userDesc'),
+    path: '/categoryManage/categoryList/categoryDesc',
+    name: 'categoryDesc',
+    component: () => import('@/pages/categoryManage/categoryDesc'),
     show: 'false',
     meta: {
-      title: '用户详情'
+      title: '分类详情'
     }
   }],
   tagsManage: [{

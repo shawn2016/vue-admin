@@ -6,7 +6,6 @@ var categorySchema = mongoose.Schema({
     createTime: Date,
     userCode: String,
     updateTime: Date,
-    platType:String,
     desc: String
 }, { collection: 'category' });
 module.exports = {
